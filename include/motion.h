@@ -5,7 +5,7 @@ using namespace std;
 #include "macros.h"
 #define USE_GYRO 1
 #define slewAdd 6
-int velCap; //velCap limits the change in velocity and must be global
+int velCap; 
 int targetLeft;
 int targetRight;
 bool isAuton=false;
@@ -128,13 +128,10 @@ void swingRight(int pos,int pw){
 		if (abs(error) > 30)t = 0;
 		wait(5);
 	}
-
-      setM(Left,0);
-   setM(Right2,0);
-   setM(Left2,0);
-   setM(Right,0);
- 
-
+  setM(Left,0);
+  setM(Right2,0);
+  setM(Left2,0);
+  setM(Right,0);
 }
 void swingLeft(int pos,int pw){
    int error = 300, lasterror = pos, totalerror = 0;
