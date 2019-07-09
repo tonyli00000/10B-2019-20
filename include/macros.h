@@ -12,6 +12,7 @@ using namespace vex;
 #define hold(a) a.stop(brakeType::hold)
 #define coast(a) a.stop(brakeType::coast) 
 
+//PID Constants
 #define kp 0.06
 #define kd 0.03
 #define ki 0.0001
@@ -42,6 +43,7 @@ int getDiff(int angle,int currAngle){
   }
   return diff;
 }
+//Slew Rate Control
 int slew(){
   while(true){
     for(int i=0;i<4;i++){
