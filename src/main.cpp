@@ -1,8 +1,9 @@
-
 #include "vex.h"
 #include "auton.h"
 #include "autonselection.h"
 
+#define DEBUG 1
+#define AUTON 1
 using namespace vex;
 
 
@@ -19,9 +20,11 @@ void autonomous( void ) {
   init();
   Drive.resume();
   S.resume();
+
   int a=autonomousSelection+1;
-  a=1;
+  if(DEBUG)a=AUTON;
   add=slewAdd;
+
   switch(a){
     case 1:Red1();
     case 2:Red2();
@@ -48,26 +51,12 @@ void usercontrol( void ) {
 }
 
 int main() {
-  Brain.Screen.pressed(userTouchCallbackPressed);
-	Brain.Screen.released(userTouchCallbackReleased);
-
-	Brain.Screen.setFillColor(vex::color(0x400000));
-	Brain.Screen.setPenColor(vex::color(0x400000));
-	Brain.Screen.drawRectangle(0, 0, 480, 120);
-	Brain.Screen.setFillColor(vex::color(0x000040));
-	Brain.Screen.setPenColor(vex::color(0x000040));
-	Brain.Screen.drawRectangle(0, 120, 480, 120);
-
-	// initial display
-	displayButtonControls(0, false);
+    initScreen();
     Competition.autonomous( autonomous );
     Competition.drivercontrol( usercontrol );
-    
-    //Run the pre-autonomous function. 
     pre_auton();
-                      
-    while(1) {
-      vex::task::sleep(20);
+                 
+    while(true) {
+      wait(20);
     }    
-       
 }

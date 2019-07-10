@@ -22,6 +22,7 @@ button buttons[] = {
   {  390, 150, 60, 60,  false, 0x0000E0, "B4" }
 };
 
+
 // forward ref
 void displayButtonControls(int index, bool pressed);
 
@@ -108,4 +109,16 @@ displayButtonControls(int index, bool pressed) {
 		Brain.Screen.drawRectangle(buttons[i].xpos, buttons[i].ypos, buttons[i].width, buttons[i].height, vex::color::transparent);
 		if (buttons[i].label != NULL)Brain.Screen.printAt(buttons[i].xpos + 8, buttons[i].ypos + buttons[i].height - 8, buttons[i].label);
 	}
+}
+void initScreen(){
+    Brain.Screen.pressed(userTouchCallbackPressed);
+	Brain.Screen.released(userTouchCallbackReleased);
+
+	Brain.Screen.setFillColor(vex::color(0x400000));
+	Brain.Screen.setPenColor(vex::color(0x400000));
+	Brain.Screen.drawRectangle(0, 0, 480, 120);
+	Brain.Screen.setFillColor(vex::color(0x000040));
+	Brain.Screen.setPenColor(vex::color(0x000040));
+	Brain.Screen.drawRectangle(0, 120, 480, 120);
+	displayButtonControls(0, false);
 }

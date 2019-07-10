@@ -3,7 +3,7 @@ using namespace vex;
 using namespace std;
 #include "motorconfig.h"
 #include "macros.h"
-#define USE_GYRO 1
+#define USE_GYRO 0
 #define slewAdd 6
 int velCap; 
 int targetLeft;
