@@ -1,4 +1,4 @@
-int autonomousSelection = -1;
+int autonomousSelection = 0;
 
 typedef struct _button {
 	int    xpos;
