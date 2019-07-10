@@ -5,100 +5,100 @@ using namespace std;
 #include "macros.h"
 #define USE_GYRO 0
 #define slewAdd 6
-int velCap; 
+int velCap;
 int targetLeft;
 int targetRight;
-bool isAuton=false;
-bool straight=false;
-int last=0;
-int currAngle=0;
-int drivePIDFn(){
-  clear(Left);
-  clear(Right);
+bool isAuton = false;
+bool straight = false;
+int last = 0;
+int currAngle = 0;
+int drivePIDFn() {
+	clear(Left);
+	clear(Right);
 
-  int errorLeft;
-  int errorRight;
-  int lasterrorLeft,lasterrorRight;
-  int totalerrorLeft,totalerrorRight;
-  float kpTurn = 0.2;
-  int acc = 5;
-  int voltageLeft = 0;
-  int voltageRight = 0;
-  int signLeft;
-  int signRight;
-  
-  wait(20);
-  while(isAuton){
-    errorLeft = targetLeft - get(Left); //error is target minus actual value
-    errorRight = targetRight - get(Right);
+	int errorLeft;
+	int errorRight;
+	int lasterrorLeft, lasterrorRight;
+	int totalerrorLeft, totalerrorRight;
+	float kpTurn = 0.2;
+	int acc = 5;
+	int voltageLeft = 0;
+	int voltageRight = 0;
+	int signLeft;
+	int signRight;
 
-    if(errorLeft<0)totalerrorLeft=0;
-    if(errorRight<0)totalerrorRight=0;
-    if (abs(errorLeft) < 500 && errorLeft != 0)totalerrorLeft += errorLeft;
+	wait(20);
+	while (isAuton) {
+		errorLeft = targetLeft - get(Left); //error is target minus actual value
+		errorRight = targetRight - get(Right);
+
+		if (errorLeft < 0)totalerrorLeft = 0;
+		if (errorRight < 0)totalerrorRight = 0;
+		if (abs(errorLeft) < 500 && errorLeft != 0)totalerrorLeft += errorLeft;
 		else totalerrorLeft = 0;
-    if (abs(errorRight) < 500 && errorRight != 0)totalerrorRight += errorRight;
+		if (abs(errorRight) < 500 && errorRight != 0)totalerrorRight += errorRight;
 		else totalerrorRight = 0;
 
-    int derivLeft=errorLeft-lasterrorLeft;
-    int derivRight=errorRight-lasterrorRight;
+		int derivLeft = errorLeft - lasterrorLeft;
+		int derivRight = errorRight - lasterrorRight;
 
-    signLeft = errorLeft / abs(errorLeft); // + or - 1
-    signRight = errorRight / abs(errorRight);
+		signLeft = errorLeft / abs(errorLeft); // + or - 1
+		signRight = errorRight / abs(errorRight);
 
-    if(signLeft == signRight){
-      voltageLeft = errorLeft * kp+derivLeft*kd+totalerrorLeft*ki; //intended voltage is error times constant
-      voltageRight = errorRight * kp+derivRight*kd+totalerrorRight*ki;
-    }
-    else{
-      voltageLeft = errorLeft * kpT+derivLeft*kdT+totalerrorLeft*kiT; //intended voltage is error times constant
-      voltageRight = errorRight * kpT+derivRight*kdT+totalerrorRight*kiT;
-    }
+		if (signLeft == signRight) {
+			voltageLeft = errorLeft * kp + derivLeft * kd + totalerrorLeft * ki; //intended voltage is error times constant
+			voltageRight = errorRight * kp + derivRight * kd + totalerrorRight * ki;
+		}
+		else {
+			voltageLeft = errorLeft * kpT + derivLeft * kdT + totalerrorLeft * kiT; //intended voltage is error times constant
+			voltageRight = errorRight * kpT + derivRight * kdT + totalerrorRight * kiT;
+		}
 
-    velCap = velCap + acc;  //slew rate
-    if(velCap > 100){
-      velCap = 100; //velCap cannot exceed 100
-    }
-    target[0]=voltageLeft;
-    target[2]=voltageRight;
-    if(targetLeft==targetRight && USE_GYRO){
-      int angle=Gyro.value(rotationUnits::raw);
-      int diff=getDiff(angle,currAngle);
-      if(targetLeft>0){
-        if(diff<0)target[0]+=abs(diff)*kc,target[2]-=abs(diff)*kc;
-        else target[0]-=abs(diff)*kc,target[2]+=abs(diff)*kc;
-      }
-      else{
-        if(diff>0)target[0]+=abs(diff)*kc,target[2]-=abs(diff)*kc;
-        else target[0]-=abs(diff)*kc,target[2]+=abs(diff)*kc;
-      }
-    }
-   
-    wait(20);
-  }
-  return 0;
+		velCap = velCap + acc;  //slew rate
+		if (velCap > 100) {
+			velCap = 100; //velCap cannot exceed 100
+		}
+		target[0] = voltageLeft;
+		target[2] = voltageRight;
+		if (targetLeft == targetRight && USE_GYRO) {
+			int angle = Gyro.value(rotationUnits::raw);
+			int diff = getDiff(angle, currAngle);
+			if (targetLeft > 0) {
+				if (diff < 0)target[0] += abs(diff) * kc, target[2] -= abs(diff) * kc;
+				else target[0] -= abs(diff) * kc, target[2] += abs(diff) * kc;
+			}
+			else {
+				if (diff > 0)target[0] += abs(diff) * kc, target[2] -= abs(diff) * kc;
+				else target[0] -= abs(diff) * kc, target[2] += abs(diff) * kc;
+			}
+		}
+
+		wait(20);
+	}
+	return 0;
 }
 
-void drive(int left, int right){
-  currAngle=Gyro.value(rotationUnits::raw);
-  if(left==right)straight=true;
-  else straight=false;
-  Brain.Screen.print(last);
-  targetLeft = targetLeft + left;
-  targetRight = targetRight + right;
-  velCap = 0; 
+void drive(int left, int right) {
+	currAngle = Gyro.value(rotationUnits::raw);
+	if (left == right)straight = true;
+	else straight = false;
+	Brain.Screen.print(last);
+	targetLeft = targetLeft + left;
+	targetRight = targetRight + right;
+	velCap = 0;
 }
 
-void swingRight(int pos,int pw){
-   int error = 300, lasterror = pos, totalerror = 0;
-	Left.resetRotation();Left2.resetRotation();
-    Right.resetRotation();Right2.resetRotation();
-    Left.setStopping(brakeType::brake);
-    Right.setStopping(brakeType::brake);
-    Left2.setStopping(brakeType::brake);
-    Right2.setStopping(brakeType::brake);
+void swingRight(int pos, int pw) {
+	int error = 300, lasterror = pos, totalerror = 0;
+	Left.resetRotation(); Left2.resetRotation();
+	Right.resetRotation(); Right2.resetRotation();
+	Left.setStopping(brakeType::brake);
+	Right.setStopping(brakeType::brake);
+	Left2.setStopping(brakeType::brake);
+	Right2.setStopping(brakeType::brake);
 	int t = 0;
-    
-	while (abs(error)>10) {
+
+	while (abs(error) > 10) {
 		//Error Calculation
 		double a = Right.rotation(rotationUnits::deg);
 		//Clears the motor encoder
@@ -110,40 +110,40 @@ void swingRight(int pos,int pw){
 		//Calculation for the P, I, D terms
 		int derivative = error - lasterror;
 		int P = error * kpT, D = derivative * kdT, I = totalerror * kiT;
-        int LeftPower=P+I+D,RightPower=P+I+D;
-        if(LeftPower>=100)LeftPower=100;
-        if(LeftPower<=-100)LeftPower=-100;
-        if(RightPower>=100)RightPower=100;
-        if(RightPower<=-100)RightPower=-100;
+		int LeftPower = P + I + D, RightPower = P + I + D;
+		if (LeftPower >= 100)LeftPower = 100;
+		if (LeftPower <= -100)LeftPower = -100;
+		if (RightPower >= 100)RightPower = 100;
+		if (RightPower <= -100)RightPower = -100;
 
-	setM(Right,RightPower);
-    setM(Right2, RightPower);
-    
-		setM(Left, RightPower/100.0*pw);
-		
-		setM(Left2, RightPower/100.0*pw);
+		setM(Right, RightPower);
+		setM(Right2, RightPower);
+
+		setM(Left, RightPower / 100.0 * pw);
+
+		setM(Left2, RightPower / 100.0 * pw);
 
 		lasterror = error;
 		t += 5;
 		if (abs(error) > 30)t = 0;
 		wait(5);
 	}
-  setM(Left,0);
-  setM(Right2,0);
-  setM(Left2,0);
-  setM(Right,0);
+	setM(Left, 0);
+	setM(Right2, 0);
+	setM(Left2, 0);
+	setM(Right, 0);
 }
-void swingLeft(int pos,int pw){
-   int error = 300, lasterror = pos, totalerror = 0;
-	Left.resetRotation();Left2.resetRotation();
-    Right.resetRotation();Right2.resetRotation();
-    Left.setStopping(brakeType::brake);
-    Right.setStopping(brakeType::brake);
-    Left2.setStopping(brakeType::brake);
-    Right2.setStopping(brakeType::brake);
+void swingLeft(int pos, int pw) {
+	int error = 300, lasterror = pos, totalerror = 0;
+	Left.resetRotation(); Left2.resetRotation();
+	Right.resetRotation(); Right2.resetRotation();
+	Left.setStopping(brakeType::brake);
+	Right.setStopping(brakeType::brake);
+	Left2.setStopping(brakeType::brake);
+	Right2.setStopping(brakeType::brake);
 	int t = 0;
-    
-	while (abs(error)>10) {
+
+	while (abs(error) > 10) {
 		//Error Calculation
 		double a = Left.rotation(rotationUnits::deg);
 		//Clears the motor encoder
@@ -155,35 +155,30 @@ void swingLeft(int pos,int pw){
 		//Calculation for the P, I, D terms
 		int derivative = error - lasterror;
 		int P = error * kpT, D = derivative * kdT, I = totalerror * kiT;
-        int LeftPower=P+I+D,RightPower=P+I+D;
-        if(LeftPower>=100)LeftPower=100;
-        if(LeftPower<=-100)LeftPower=-100;
-        if(RightPower>=100)RightPower=100;
-        if(RightPower<=-100)RightPower=-100;
+		int LeftPower = P + I + D, RightPower = P + I + D;
+		if (LeftPower >= 100)LeftPower = 100;
+		if (LeftPower <= -100)LeftPower = -100;
+		if (RightPower >= 100)RightPower = 100;
+		if (RightPower <= -100)RightPower = -100;
 
 
 		//Setting Motor Values
-    setM(Left,LeftPower);
-    setM(Left2, LeftPower);
-    
-		setM(Right, LeftPower/100.0*pw);
-		
-		setM(Right2, LeftPower/100.0*pw);
+		setM(Left, LeftPower);
+		setM(Left2, LeftPower);
+
+		setM(Right, LeftPower / 100.0 * pw);
+
+		setM(Right2, LeftPower / 100.0 * pw);
 
 		lasterror = error;
 		t += 5;
 		if (abs(error) > 30)t = 0;
 		wait(5);
 	}
-
-	//Stops motor to ensure accuracy
-   // stopDrive(120);
-      setM(Left,0);
-   setM(Right2,0);
-   setM(Left2,0);
-   setM(Right,0);
- 
-
+	setM(Left, 0);
+	setM(Right2, 0);
+	setM(Left2, 0);
+	setM(Right, 0);
 }
 
 
