@@ -4,7 +4,7 @@ using namespace std;
 #include "motorconfig.h"
 #include "macros.h"
 #define USE_GYRO 0
-#define slewAdd 6
+#define slewAdd 10
 int velCap;
 int targetLeft;
 int targetRight;
@@ -58,6 +58,10 @@ int drivePIDFn() {
 		if (velCap > 100) {
 			velCap = 100; //velCap cannot exceed 100
 		}
+    // setM(Left,voltageLeft);
+    // setM(Left2,voltageLeft);
+    // setM(Right,voltageRight);
+    // setM(Right2,voltageRight);
 		target[0] = voltageLeft;
 		target[2] = voltageRight;
 		if (targetLeft == targetRight && USE_GYRO) {

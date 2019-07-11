@@ -1,9 +1,8 @@
 #include "driver.h"
+#include "autonFunc.h"
 using namespace vex;
 void Red1(){
-  drive(5000,5000);
-  wait(4000);
-  drive(1000,-1000);
+  deploy();
 }
 void Red2(){
 

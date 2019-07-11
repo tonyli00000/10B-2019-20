@@ -13,7 +13,7 @@ using namespace vex;
 #define coast(a) a.stop(brakeType::coast) 
 
 //PID Constants
-#define kp 0.09
+#define kp 0.06
 #define kd 0.03
 #define ki 0.0001
 #define kpT 0.11
