@@ -61,7 +61,12 @@ int drivePIDFn() {
 		if (velCap > 100) {
 			velCap = 100; //velCap cannot exceed 100
 		}
+    if(voltageLeft>100)voltageLeft=100;
+    if(voltageLeft<-100)voltageLeft=-100;
 
+    if(voltageRight>100)voltageRight=100;
+    if(voltageRight<-100)voltageRight=-100;
+    
     //Slew Rate Control
 		target[0] = voltageLeft;
 		target[2] = voltageRight;
