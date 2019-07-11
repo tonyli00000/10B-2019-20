@@ -5,6 +5,9 @@ using namespace std;
 #include "macros.h"
 #define USE_GYRO 0
 #define slewAdd 10
+#define TURN_CONSTANT 4.3
+#define TILE_CONSTANT 700.0
+
 int velCap;
 int targetLeft;
 int targetRight;
@@ -58,10 +61,8 @@ int drivePIDFn() {
 		if (velCap > 100) {
 			velCap = 100; //velCap cannot exceed 100
 		}
-    // setM(Left,voltageLeft);
-    // setM(Left2,voltageLeft);
-    // setM(Right,voltageRight);
-    // setM(Right2,voltageRight);
+
+    //Slew Rate Control
 		target[0] = voltageLeft;
 		target[2] = voltageRight;
 		if (targetLeft == targetRight && USE_GYRO) {
@@ -90,6 +91,14 @@ void drive(int left, int right) {
 	targetLeft = targetLeft + left;
 	targetRight = targetRight + right;
 	velCap = 0;
+}
+
+void driveTile(double tiles){
+  drive(tiles*TILE_CONSTANT,tiles*TILE_CONSTANT);
+}
+
+void turnDeg(double angle){
+  drive(TURN_CONSTANT*angle,-TURN_CONSTANT*angle);
 }
 
 void swingRight(int pos, int pw) {
