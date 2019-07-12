@@ -80,6 +80,8 @@ userTouchCallbackReleased() {
 		autonomousSelection = index;
 
 		displayButtonControls(index, false);
+
+    Brain.Screen.printAt(30,125,("Auton Selected: "+auton_description[index]).c_str());
 	}
 }
 

@@ -1,6 +1,8 @@
 #include "driver.h"
 #include "autonFunc.h"
 using namespace vex;
+#define AUTON_NUM 8
+string auton_description[AUTON_NUM]={"Test1","Test2"};
 void Red1(){
   deploy();
 }
