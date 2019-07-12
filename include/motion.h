@@ -3,6 +3,7 @@ using namespace vex;
 using namespace std;
 #include "motorconfig.h"
 #include "macros.h"
+#include "mathutil.h"
 #define USE_GYRO 0
 #define slewAdd 10
 #define TURN_CONSTANT 4.3

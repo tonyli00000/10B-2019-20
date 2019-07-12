@@ -13,10 +13,8 @@ void pre_auton( void ) {
   Brain.Screen.print("Calibrated");
   while(true) {
       int a=Gyro.value(rotationUnits::raw);
-      std::string p;
-      std::stringstream ss;
-      ss << a;
-      p = ss.str()+"    ";
+      a=getDiff(a,100);
+      string p=to_string(a)+"    ";
       Brain.Screen.printAt(0,130,p.c_str());
       wait(20);
     }    
