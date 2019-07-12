@@ -5,12 +5,21 @@
 #define DEBUG 1
 #define AUTON 1
 using namespace vex;
-
+using namespace std;
 
 void pre_auton( void ) {
   Gyro.startCalibration();
-  while(Gyro.isCalibrating() && Competition.DISABLED)wait(20);
+  wait(2000);
   Brain.Screen.print("Calibrated");
+  while(true) {
+      int a=Gyro.value(rotationUnits::raw);
+      std::string p;
+      std::stringstream ss;
+      ss << a;
+      p = ss.str()+"    ";
+      Brain.Screen.printAt(0,130,p.c_str());
+      wait(20);
+    }    
 }
 
 void autonomous( void ) {
@@ -57,6 +66,12 @@ int main() {
     pre_auton();
                  
     while(true) {
+      int a=Gyro.value(rotationUnits::raw);
+      std::string p;
+      std::stringstream ss;
+      ss << a;
+      p = ss.str()+"    ";
+      Brain.Screen.printAt(0,0,p.c_str());
       wait(20);
     }    
 }
