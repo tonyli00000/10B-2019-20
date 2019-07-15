@@ -11,13 +11,13 @@ void pre_auton( void ) {
   Gyro.startCalibration();
   wait(2000);
   Brain.Screen.print("Calibrated");
-  while(true) {
-      int a=Gyro.value(rotationUnits::raw);
-      a=getDiff(a,100);
-      string p=to_string(a)+"    ";
-      Brain.Screen.printAt(0,130,p.c_str());
-      wait(20);
-    }    
+  // while(true) {
+  //     int a=Gyro.value(rotationUnits::raw);
+  //     a=getDiff(a,100);
+  //     string p=to_string(a)+"    ";
+  //     Brain.Screen.printAt(0,130,p.c_str());
+  //     wait(20);
+  //   }    
 }
 
 void autonomous( void ) {
