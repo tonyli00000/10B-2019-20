@@ -38,9 +38,9 @@ int drivePIDFn() {
 
 		if (errorLeft < 0)totalerrorLeft = 0;
 		if (errorRight < 0)totalerrorRight = 0;
-		if (abs(errorLeft) < 500 && errorLeft != 0)totalerrorLeft += errorLeft;
+		if (abs(errorLeft) < 80 && errorLeft != 0)totalerrorLeft += errorLeft;
 		else totalerrorLeft = 0;
-		if (abs(errorRight) < 500 && errorRight != 0)totalerrorRight += errorRight;
+		if (abs(errorRight) < 80 && errorRight != 0)totalerrorRight += errorRight;
 		else totalerrorRight = 0;
 
 		int derivLeft = errorLeft - lasterrorLeft;
