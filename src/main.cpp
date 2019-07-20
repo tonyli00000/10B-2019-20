@@ -50,10 +50,10 @@ void usercontrol( void ) {
   init();
   task Slew(slew);
   Slew.resume();
-  add=7;
+  add=50;
   while (true) {
     run();
-    wait(20);
+    //wait(5);
   }
 }
 

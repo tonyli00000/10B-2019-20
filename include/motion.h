@@ -5,9 +5,9 @@ using namespace std;
 #include "macros.h"
 #include "mathutil.h"
 #define USE_GYRO 0
-#define slewAdd 10
-#define TURN_CONSTANT 4.3
-#define TILE_CONSTANT 700.0
+#define slewAdd 7
+#define TURN_CONSTANT 7.2
+#define TILE_CONSTANT 1680.0
 
 int velCap;
 int targetLeft;
@@ -38,9 +38,9 @@ int drivePIDFn() {
 
 		if (errorLeft < 0)totalerrorLeft = 0;
 		if (errorRight < 0)totalerrorRight = 0;
-		if (abs(errorLeft) < 80 && errorLeft != 0)totalerrorLeft += errorLeft;
+		if (abs(errorLeft) < 500 && errorLeft != 0)totalerrorLeft += errorLeft;
 		else totalerrorLeft = 0;
-		if (abs(errorRight) < 80 && errorRight != 0)totalerrorRight += errorRight;
+		if (abs(errorRight) < 500 && errorRight != 0)totalerrorRight += errorRight;
 		else totalerrorRight = 0;
 
 		int derivLeft = errorLeft - lasterrorLeft;
@@ -58,15 +58,13 @@ int drivePIDFn() {
 			voltageRight = errorRight * kpT + derivRight * kdT + totalerrorRight * kiT;
 		}
 
-		velCap = velCap + acc;  //slew rate
-		if (velCap > 100) {
-			velCap = 100; //velCap cannot exceed 100
-		}
-    if(voltageLeft>100)voltageLeft=100;
-    if(voltageLeft<-100)voltageLeft=-100;
+//		velCap = velCap + acc;  //slew rate
 
-    if(voltageRight>100)voltageRight=100;
-    if(voltageRight<-100)voltageRight=-100;
+    if(voltageLeft>velCap)voltageLeft=velCap;
+    if(voltageLeft<-velCap)voltageLeft=-velCap;
+
+    if(voltageRight>velCap)voltageRight=velCap;
+    if(voltageRight<-velCap)voltageRight=-velCap;
     
     //Slew Rate Control
 		target[0] = voltageLeft;
@@ -99,12 +97,14 @@ void drive(int left, int right) {
 	velCap = 0;
 }
 
-void driveTile(double tiles){
+void driveTile(double tiles,int cap=100){
   drive(tiles*TILE_CONSTANT,tiles*TILE_CONSTANT);
+  velCap=cap;
 }
 
-void turnDeg(double angle){
+void turnDeg(double angle,int cap=100){
   drive(TURN_CONSTANT*angle,-TURN_CONSTANT*angle);
+  velCap=cap;
 }
 
 void swingRight(int pos, int pw) {

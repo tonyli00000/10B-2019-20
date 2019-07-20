@@ -14,7 +14,7 @@ using namespace vex;
 
 //PID Constants
 #define kp 0.06
-#define kd 0.03
+#define kd 0.028
 #define ki 0.0001
 #define kpT 0.11
 #define kdT 0.03
