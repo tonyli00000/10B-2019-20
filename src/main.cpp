@@ -46,6 +46,7 @@ void autonomous( void ) {
 
 
 void usercontrol( void ) {
+  ct.ButtonUp.released(changeSpeed);
   isAuton=false;
   init();
   task Slew(slew);
