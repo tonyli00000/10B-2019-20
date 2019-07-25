@@ -53,6 +53,7 @@ void usercontrol( void ) {
   Slew.resume();
   add=50;
   while (true) {
+    if(P(ButtonDown))autonomous();
     run();
     //wait(5);
   }

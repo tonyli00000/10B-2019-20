@@ -19,7 +19,7 @@ using namespace vex;
 #define kpT 0.11
 #define kdT 0.03
 #define kiT 0.0001
-#define kc 2
+#define kc 0.13
 int curr[4]={0,0,0,0};
 int target[4]={0,0,0,0};
 int add=7;

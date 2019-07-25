@@ -14,7 +14,6 @@ void changeSpeed(){
 void run(){
 
   //Drive Base
-  
   int cap=100;
   if(!full_speed)cap=70;
   int x=ct.Axis3.value(),y=ct.Axis2.value();

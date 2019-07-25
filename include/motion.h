@@ -4,7 +4,7 @@ using namespace std;
 #include "motorconfig.h"
 #include "macros.h"
 #include "mathutil.h"
-#define USE_GYRO 0
+#define USE_GYRO 1
 #define slewAdd 7
 #define TURN_CONSTANT 7.2
 #define TILE_CONSTANT 1680.0
