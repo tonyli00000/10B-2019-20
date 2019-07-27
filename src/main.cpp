@@ -2,22 +2,26 @@
 #include "auton.h"
 #include "autonselection.h"
 
+/*
+Before Comp To-Do: Actually READ this
+Main: Remember to change DEBUG and AUTON for actual competition
+Test autonselection at competition
+Motion.h: Tune Tile and Turn Constants at actual competition
+Motion.h: Disable gyro if inconsistent or static issues
+Skills.h: Test skills
+*/
+
 #define DEBUG 1
 #define AUTON 1
 using namespace vex;
 using namespace std;
 
+//Sensor setup
 void pre_auton( void ) {
+  //Give robot enough time for gyro calibration
   Gyro.startCalibration();
   wait(2000);
   Brain.Screen.print("Calibrated");
-  // while(true) {
-  //     int a=Gyro.value(rotationUnits::raw);
-  //     a=getDiff(a,100);
-  //     string p=to_string(a)+"    ";
-  //     Brain.Screen.printAt(0,130,p.c_str());
-  //     wait(20);
-  //   }    
 }
 
 void autonomous( void ) {
@@ -47,7 +51,7 @@ void autonomous( void ) {
 
 void usercontrol( void ) {
   ct.ButtonUp.released(changeSpeed);
-  isAuton=false;
+  isAuton=false; 
   init();
   task Slew(slew);
   Slew.resume();
@@ -60,6 +64,7 @@ void usercontrol( void ) {
 }
 
 int main() {
+  genLookUp(0.07, 0.7);
     initScreen();
     Competition.autonomous( autonomous );
     Competition.drivercontrol( usercontrol );

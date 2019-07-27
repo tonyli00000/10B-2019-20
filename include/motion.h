@@ -8,6 +8,7 @@ using namespace std;
 #define slewAdd 7
 #define TURN_CONSTANT 7.2
 #define TILE_CONSTANT 1680.0
+vector<double>turn_lookup(1801);
 
 int velCap;
 int targetLeft;
@@ -72,13 +73,14 @@ int drivePIDFn() {
 		if (targetLeft == targetRight && USE_GYRO) {
 			int angle = Gyro.value(rotationUnits::raw);
 			int diff = getDiff(angle, currAngle);
+      double correct=abs(diff)*turn_lookup[diff];
 			if (targetLeft > 0) {
-				if (diff < 0)target[0] += abs(diff) * kc, target[2] -= abs(diff) * kc;
-				else target[0] -= abs(diff) * kc, target[2] += abs(diff) * kc;
+				if (diff < 0)target[0] += correct , target[2] -= correct ;
+				else target[0] -= correct , target[2] += correct ;
 			}
 			else {
-				if (diff > 0)target[0] += abs(diff) * kc, target[2] -= abs(diff) * kc;
-				else target[0] -= abs(diff) * kc, target[2] += abs(diff) * kc;
+				if (diff > 0)target[0] += correct , target[2] -= correct ;
+				else target[0] -= correct , target[2] += correct ;
 			}
 		}
 
