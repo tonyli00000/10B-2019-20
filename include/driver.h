@@ -11,6 +11,10 @@ bool full_speed=true;
 void changeSpeed(){
   full_speed=!full_speed;
 }
+
+bool sign(int x){
+  return x>0;
+}
 void run(){
 
   //Drive Base Control
@@ -18,10 +22,12 @@ void run(){
   //2 Different Speed Modes 100%/70%
   if(!full_speed)cap=70; 
   int x=ct.Axis3.value(),y=ct.Axis2.value();
-
-  //Dead Zone Control and Straight-correction
-  if(abs(x)<10 && abs(y)<10)x=0,y=0;
+  if(abs(x)<=10 && abs(y)<=10)x=0,y=0;
   else if(abs(x-y)<delta)x=y;
+  x=(sign(x)?100.0:-100.0)*pow(1.0*abs(x/100.0),2.0);
+  y=(sign(y)?100.0:-100.0)*pow(1.0*abs(y/100.0),2.0);
+  //Dead Zone Control and Straight-correction
+  
   if(x<-cap)x=-cap;
   if(x>cap)x=cap;
   if(y<-cap)y=-cap;
