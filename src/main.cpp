@@ -11,6 +11,7 @@ Motion.h: Disable gyro if inconsistent or static issues
 Skills.h: Test skills
 */
 
+//Constants for Auton Selection or Testing
 #define DEBUG 1
 #define AUTON 1
 using namespace vex;
@@ -59,24 +60,18 @@ void usercontrol( void ) {
   while (true) {
     if(P(ButtonDown))autonomous();
     run();
-    //wait(5);
   }
 }
 
 int main() {
-  genLookUp(0.07, 0.7);
+  //Generate Look-Up Table for Gyro Based Turn Correction
+  genLookUp(0.12, 0.7);
     initScreen();
     Competition.autonomous( autonomous );
     Competition.drivercontrol( usercontrol );
     pre_auton();
                  
     while(true) {
-      int a=Gyro.value(rotationUnits::raw);
-      std::string p;
-      std::stringstream ss;
-      ss << a;
-      p = ss.str()+"    ";
-      Brain.Screen.printAt(0,0,p.c_str());
       wait(20);
     }    
 }

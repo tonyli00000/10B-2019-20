@@ -4,10 +4,12 @@ using namespace std;
 #include "motorconfig.h"
 #include "macros.h"
 #include "mathutil.h"
+
+//Change This Field if Gyro is inconsistent
 #define USE_GYRO 1
 #define slewAdd 7
 #define TURN_CONSTANT 7.2
-#define TILE_CONSTANT 1680.0
+#define TILE_CONSTANT 1600.0
 vector<double>turn_lookup(1801);
 
 int velCap;
@@ -36,7 +38,7 @@ int drivePIDFn() {
 	while (isAuton) {
 		errorLeft = targetLeft - get(Left); //error is target minus actual value
 		errorRight = targetRight - get(Right);
-
+    //Error Calculations for PID
 		if (errorLeft < 0)totalerrorLeft = 0;
 		if (errorRight < 0)totalerrorRight = 0;
 		if (abs(errorLeft) < 500 && errorLeft != 0)totalerrorLeft += errorLeft;
@@ -51,15 +53,15 @@ int drivePIDFn() {
 		signRight = errorRight / abs(errorRight);
 
 		if (signLeft == signRight) {
-			voltageLeft = errorLeft * kp + derivLeft * kd + totalerrorLeft * ki; //intended voltage is error times constant
+      //intended voltage is error times constant
+			voltageLeft = errorLeft * kp + derivLeft * kd + totalerrorLeft * ki; 
 			voltageRight = errorRight * kp + derivRight * kd + totalerrorRight * ki;
 		}
 		else {
-			voltageLeft = errorLeft * kpT + derivLeft * kdT + totalerrorLeft * kiT; //intended voltage is error times constant
+      //intended voltage is error times constant
+			voltageLeft = errorLeft * kpT + derivLeft * kdT + totalerrorLeft * kiT; 
 			voltageRight = errorRight * kpT + derivRight * kdT + totalerrorRight * kiT;
 		}
-
-//		velCap = velCap + acc;  //slew rate
 
     if(voltageLeft>velCap)voltageLeft=velCap;
     if(voltageLeft<-velCap)voltageLeft=-velCap;
@@ -73,16 +75,11 @@ int drivePIDFn() {
 		if (targetLeft == targetRight && USE_GYRO) {
 			int angle = Gyro.value(rotationUnits::raw);
 			int diff = getDiff(angle, currAngle);
-      double correct=abs(diff)*turn_lookup[diff];
-			if (targetLeft > 0) {
+      double correct=abs(diff)*turn_lookup[abs(diff)];
+			
 				if (diff < 0)target[0] += correct , target[2] -= correct ;
 				else target[0] -= correct , target[2] += correct ;
-			}
-			else {
-				if (diff > 0)target[0] += correct , target[2] -= correct ;
-				else target[0] -= correct , target[2] += correct ;
-			}
-		}
+    }
 
 		wait(20);
 	}

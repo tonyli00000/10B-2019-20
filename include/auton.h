@@ -7,7 +7,25 @@ void Red1(){
   //deploy();
   //driveTile(-1,10);
   //wait(400);
-  driveTile(6);
+  setM(Roller,100);
+
+  driveTile(2,70);
+  wait(3000);
+  driveTile(-1,70);
+  wait(2500);
+  turnDeg(145);
+  wait(900);
+  driveTile(1,40);
+  wait(800);
+  setM(Deploy,100);
+  wait(400);
+  setM(Lift1,-40);
+  setM(Lift2,-40);
+  wait(500);
+  setM(Deploy,0);
+  setM(Lift1,-0);
+  setM(Lift2,-0);
+  driveTile(-2);
 }
 void Red2(){
 

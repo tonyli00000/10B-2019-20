@@ -1,16 +1,17 @@
 using namespace vex;
 
 brain       Brain;
-motor Left=motor(PORT15,ratio18_1);
-motor Right=motor(PORT13,ratio18_1,true);
+motor Left=motor(PORT10,ratio18_1);
+motor Right=motor(PORT1,ratio18_1,true);
 
 motor Left2=motor(PORT20,ratio18_1);
 motor Right2=motor(PORT11,ratio18_1,true);
-motor Roller=motor(PORT7);
-motor Roller2=motor(PORT10,ratio36_1,true);
-motor Lift1=motor(PORT17,true);
-motor Lift2=motor(PORT18);
-motor Deploy=motor(PORT3);
+
+motor Roller=motor(PORT17);
+
+motor Lift1=motor(PORT19,true);
+motor Lift2=motor(PORT12);
+motor Deploy=motor(PORT13);
 
 vex::gyro Gyro = gyro(Brain.ThreeWirePort.A);
 
