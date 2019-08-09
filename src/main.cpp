@@ -33,10 +33,12 @@ void autonomous( void ) {
   Drive.resume();
   S.resume();
 
+  //Taking the selected auton from global variable
   int a=autonomousSelection+1;
   if(DEBUG)a=AUTON;
   add=slewAdd;
 
+  //Calls each autonomous routine separately
   switch(a){
     case 1:Red1();
     case 2:Red2();
@@ -66,7 +68,7 @@ void usercontrol( void ) {
 int main() {
   //Generate Look-Up Table for Gyro Based Turn Correction
   genLookUp(0.12, 0.7);
-    initScreen();
+    initScreen(); //Initialization for auton selection program
     Competition.autonomous( autonomous );
     Competition.drivercontrol( usercontrol );
     pre_auton();
