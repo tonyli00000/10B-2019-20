@@ -28,7 +28,12 @@ void Red1(){
   driveTile(-2);
 }
 void Red2(){
-
+  isAuton=false;
+  swingRight(-1500,70);
+  wait(150);
+  isAuton=true;
+  //task dd=task(drivePIDFn);
+  //driveTile(1.25);
 }
 void Red3(){
 

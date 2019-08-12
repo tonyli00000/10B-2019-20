@@ -13,7 +13,7 @@ Skills.h: Test skills
 
 //Constants for Auton Selection or Testing
 #define DEBUG 1
-#define AUTON 1
+#define AUTON 2
 using namespace vex;
 using namespace std;
 
@@ -26,7 +26,7 @@ void pre_auton( void ) {
 }
 
 void autonomous( void ) {
-  isAuton=true;
+  inUse=true;
   task Drive(drivePIDFn);
   task S(slew);
   init();
@@ -54,7 +54,7 @@ void autonomous( void ) {
 
 void usercontrol( void ) {
   ct.ButtonUp.released(changeSpeed);
-  isAuton=false; 
+  inUse=false; //Ensuring Autonomous PID doesn't run 
   init();
   task Slew(slew);
   Slew.resume();

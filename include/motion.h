@@ -17,6 +17,7 @@ int targetLeft;
 int targetRight;
 bool isAuton = false;
 bool straight = false;
+bool inUse=false;
 int last = 0;
 int currAngle = 0;
 int drivePIDFn() {
@@ -34,8 +35,8 @@ int drivePIDFn() {
 	int signLeft;
 	int signRight;
 
-	wait(20);
-	while (isAuton) {
+	while (true) {
+    if(!inUse)continue;
 		errorLeft = targetLeft - get(Left); //error is target minus actual value
 		errorRight = targetRight - get(Right);
     //Error Calculations for PID
@@ -163,7 +164,7 @@ void swingLeft(int pos, int pw) {
 
 	while (abs(error) > 10) {
 		//Error Calculation
-		double a = Left.rotation(rotationUnits::deg);
+		double a = Left.rotation(rotationUnits::raw);
 		//Clears the motor encoder
 		error = pos - a;
 		if (error < 0)totalerror = 0;
@@ -199,5 +200,42 @@ void swingLeft(int pos, int pw) {
 	setM(Right, 0);
 }
 
+//Spline turn: Must be used with a Gyro
+//degrees: number of degrees at the maximum deviation 
+//leftPower and rightPower will control the rate of deviation
+//t_time to use in case when Gyro is not present
+void spline(int degrees,int leftPower,int rightPower,int t_time){
+  //Making sure that the other autonomous task doesn't interfere
+  inUse=false;
+  int setPoint=Gyro.value(rotationUnits::raw);
+  int angle=setPoint;
+  int curr_time=0;
+  while((USE_GYRO && abs(getDiff(angle,setPoint))<degrees) 
+    || (!USE_GYRO && curr_time<t_time)){
+    int angle=Gyro.value(rotationUnits::raw);
+    setM(Left,leftPower);
+    setM(Left2,leftPower);
+    setM(Right,rightPower);
+    setM(Right2,rightPower);
+    wait(15);
+    curr_time+=15;
+  }
+  curr_time=0;
+  swap(leftPower,rightPower);
+  //Reversing the powers to return to original angle
+  setPoint=Gyro.value(rotationUnits::raw);
+  angle=setPoint;
+  while((USE_GYRO && abs(getDiff(angle,setPoint))<degrees) 
+    || (!USE_GYRO && curr_time<t_time)){
+    int angle=Gyro.value(rotationUnits::raw);
+    setM(Left,leftPower);
+    setM(Left2,leftPower);
+    setM(Right,rightPower);
+    setM(Right2,rightPower);
+    wait(15);
+    curr_time+=15;
+  }
+  inUse=true;
+}
 
 

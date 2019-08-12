@@ -16,7 +16,7 @@ using namespace vex;
 #define kp 0.06
 #define kd 0.028
 #define ki 0.0001
-#define kpT 0.11
+#define kpT 0.19
 #define kdT 0.03
 #define kiT 0.0001
 #define kc 0.13
