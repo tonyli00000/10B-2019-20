@@ -204,15 +204,14 @@ void swingLeft(int pos, int pw) {
 //degrees: number of degrees at the maximum deviation 
 //leftPower and rightPower will control the rate of deviation
 //t_time to use in case when Gyro is not present
-void spline(int degrees,int leftPower,int rightPower,int t_time){
+void spline(int degrees,int leftPower,int rightPower,int t_time=0){
   //Making sure that the other autonomous task doesn't interfere
   inUse=false;
   int setPoint=Gyro.value(rotationUnits::raw);
   int angle=setPoint;
-  int curr_time=0;
-  while((USE_GYRO && abs(getDiff(angle,setPoint))<degrees) 
-    || (!USE_GYRO && curr_time<t_time)){
-    int angle=Gyro.value(rotationUnits::raw);
+   int curr_time=0;
+  while(abs(getDiff(angle,setPoint))<degrees) {
+    angle=Gyro.value(rotationUnits::raw);
     setM(Left,leftPower);
     setM(Left2,leftPower);
     setM(Right,rightPower);
@@ -225,9 +224,11 @@ void spline(int degrees,int leftPower,int rightPower,int t_time){
   //Reversing the powers to return to original angle
   setPoint=Gyro.value(rotationUnits::raw);
   angle=setPoint;
-  while((USE_GYRO && abs(getDiff(angle,setPoint))<degrees) 
-    || (!USE_GYRO && curr_time<t_time)){
-    int angle=Gyro.value(rotationUnits::raw);
+
+  while(abs(getDiff(angle,setPoint))<degrees){
+    angle=Gyro.value(rotationUnits::raw);
+    string x=to_string(abs(getDiff(angle,setPoint)));
+    Brain.Screen.printAt(100,100,x.c_str());
     setM(Left,leftPower);
     setM(Left2,leftPower);
     setM(Right,rightPower);
@@ -235,7 +236,13 @@ void spline(int degrees,int leftPower,int rightPower,int t_time){
     wait(15);
     curr_time+=15;
   }
+  string ppp="Done";
+  Brain.Screen.printAt(200,200,ppp.c_str());
+  leftPower=rightPower=0;
+  setM(Left,leftPower);
+    setM(Left2,leftPower);
+    setM(Right,rightPower);
+    setM(Right2,rightPower);
   inUse=true;
 }
-
 

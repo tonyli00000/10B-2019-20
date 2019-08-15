@@ -28,10 +28,8 @@ void Red1(){
   driveTile(-2);
 }
 void Red2(){
-  isAuton=false;
-  swingRight(-1500,70);
-  wait(150);
-  isAuton=true;
+ inUse=false;
+ spline(900,-30,-100,1000);
   //task dd=task(drivePIDFn);
   //driveTile(1.25);
 }

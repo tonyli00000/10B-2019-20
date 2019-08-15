@@ -23,15 +23,19 @@ void pre_auton( void ) {
   Gyro.startCalibration();
   wait(2000);
   Brain.Screen.print("Calibrated");
+  while(true){
+    string x=to_string(abs(getDiff(0,Gyro.value(rotationUnits::raw))));
+    Brain.Screen.printAt(100,100,x.c_str());
+  }
 }
 
 void autonomous( void ) {
   inUse=true;
-  task Drive(drivePIDFn);
-  task S(slew);
+ // task Drive(drivePIDFn);
+  //task S(slew);
   init();
-  Drive.resume();
-  S.resume();
+  //Drive.resume();
+  //S.resume();
 
   //Taking the selected auton from global variable
   int a=autonomousSelection+1;
@@ -74,6 +78,7 @@ int main() {
     pre_auton();
                  
     while(true) {
+
       wait(20);
     }    
 }
