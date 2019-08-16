@@ -28,8 +28,7 @@ void Red1(){
   driveTile(-2);
 }
 void Red2(){
- inUse=false;
- spline(900,-30,-100,1000);
+ spline(800,80);
   //task dd=task(drivePIDFn);
   //driveTile(1.25);
 }

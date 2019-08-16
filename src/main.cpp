@@ -31,11 +31,11 @@ void pre_auton( void ) {
 
 void autonomous( void ) {
   inUse=true;
- // task Drive(drivePIDFn);
-  //task S(slew);
+  task Drive(drivePIDFn);
+  task S(slew);
   init();
-  //Drive.resume();
-  //S.resume();
+  Drive.resume();
+  S.resume();
 
   //Taking the selected auton from global variable
   int a=autonomousSelection+1;
