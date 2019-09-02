@@ -30,8 +30,8 @@ void run() {
 	int x = ct.Axis3.value(), y = ct.Axis2.value();
 	if (abs(x) <= 10 && abs(y) <= 10)x = 0, y = 0;
 	else if (abs(x - y) < delta)x = y;
-	x = 1.05 * (sign(x) ? 100.0 : -100.0) * pow(1.0 * abs(x / 100.0), 2.0);
-	y = 1.05 * (sign(y) ? 100.0 : -100.0) * pow(1.0 * abs(y / 100.0), 2.0);
+	x = 1.2 * (sign(x) ? 100.0 : -100.0) * pow(1.0 * abs(x / 100.0), 2.0);
+	y = 1.2 * (sign(y) ? 100.0 : -100.0) * pow(1.0 * abs(y / 100.0), 2.0);
 
 
 	//Dead Zone Control and Straight-correction
@@ -47,8 +47,8 @@ void run() {
 	target[3] = y;
 
 	//2 Bar
-	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
-	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
+	if (P(ButtonR1))setM(Lift1, 40), setM(Lift2, 40);
+	else if (P(ButtonR2))setM(Lift1, -40), setM(Lift2, -40);
 	else setM(Lift1, 0), setM(Lift2, 0);
 
 	if (P(ButtonL1))setM(Deploy, 100);

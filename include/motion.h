@@ -205,34 +205,25 @@ void swingLeft(int pos, int pw) {
 //degrees: number of degrees at the maximum deviation 
 //leftPower and rightPower will control the rate of deviation
 //t_time to use in case when Gyro is not present
+#define spline_constant 4
 void spline(int degrees,int Power,int t_time=0){
   //Making sure that the other autonomous task doesn't interfere
+  //task* TT=new task(slew);
   inUse=false;
-  int setPoint=Gyro.value(rotationUnits::raw);
-  int angle=setPoint;
-  int target_angle=setPoint;
-  target_angle=(target_angle+degrees)%3600;
-  while(abs(getDiff(angle,target_angle))>20){
-    target[0]=Power;
-    target[2]=Power;
-    angle = Gyro.value(rotationUnits::raw);
-			int diff = getDiff(angle, target_angle);
-      double correct=abs(diff)*turn_lookup[abs(diff)];
-			
-			if (diff < 0)target[0] += correct , target[2] -= correct ;
-			else target[0] -= correct , target[2] += correct;
+  for(int i=800;i>=0;i-=9){
+    setM(Left,turn_lookup[i]*Power);
+    setM(Left2,turn_lookup[i]*Power);
+    setM(Right,Power);
+    setM(Right2,Power);
+    wait(spline_constant);
   }
-  target_angle=(3600+angle-degrees)%3600;
-  while(abs(getDiff(angle,target_angle))>20){
-    target[0]=Power;
-    target[2]=Power;
-    angle = Gyro.value(rotationUnits::raw);
-			int diff = getDiff(angle, target_angle);
-      double correct=abs(diff)*turn_lookup[abs(diff)];
-			
-			if (diff < 0)target[0] += correct , target[2] -= correct ;
-			else target[0] -= correct , target[2] += correct;
+  for(int i=0;i<800;i+=9){
+    setM(Right,turn_lookup[i]*Power);
+    setM(Right2,turn_lookup[i]*Power);
+    setM(Left,Power);
+    setM(Left2,Power);
+    wait(spline_constant);
   }
-  inUse=true;
+ inUse=true;
 }
 
