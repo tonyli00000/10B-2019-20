@@ -6,10 +6,10 @@ using namespace std;
 #include "mathutil.h"
 
 //Change This Field if Gyro is inconsistent
-#define USE_GYRO 1
+#define USE_GYRO 0
 #define slewAdd 7
 #define GYRO_THRESHOLD 20
-#define TURN_CONSTANT 7.2
+#define TURN_CONSTANT 7.82
 #define TILE_CONSTANT 1600.0
 vector<double>turn_lookup(1801);
 

@@ -13,7 +13,7 @@ Skills.h: Test skills
 
 //Constants for Auton Selection or Testing
 #define DEBUG 1
-#define AUTON 2
+#define AUTON 3
 using namespace vex;
 using namespace std;
 

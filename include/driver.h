@@ -27,13 +27,15 @@ void run() {
 	if (!full_speed)cap = 70, add = 7;
 	else add = 40;
 
-	int x = ct.Axis3.value(), y = ct.Axis2.value();
+	int x = ct.Axis3.value(), y = ct.Axis2.value(),z=ct.Axis4.value();
 	if (abs(x) <= 10 && abs(y) <= 10)x = 0, y = 0;
+  if(abs(z)<20)z=0;
 	else if (abs(x - y) < delta)x = y;
-	x = 1.2 * (sign(x) ? 100.0 : -100.0) * pow(1.0 * abs(x / 100.0), 2.0);
-	y = 1.2 * (sign(y) ? 100.0 : -100.0) * pow(1.0 * abs(y / 100.0), 2.0);
+	x = 1.05 * (sign(x) ? 100.0 : -100.0) * pow(1.0 * abs(x / 100.0), 2.0);
+	y = 1.05 * (sign(y) ? 100.0 : -100.0) * pow(1.0 * abs(y / 100.0), 2.0);
 
-
+  if(z!=0)x=0,y=0;
+  setM(Strafe,z);
 	//Dead Zone Control and Straight-correction
 
 	if (x < -cap)x = -cap;

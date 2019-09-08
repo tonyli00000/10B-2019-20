@@ -33,7 +33,9 @@ void Red2(){
   //driveTile(1.25);
 }
 void Red3(){
-
+  driveTile(3,90);
+  wait(3000);
+  turnDeg(90);
 }
 void Red4(){
 
