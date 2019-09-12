@@ -60,8 +60,8 @@ void usercontrol( void ) {
   ct.ButtonUp.released(changeSpeed);
   inUse=false; //Ensuring Autonomous PID doesn't run 
   init();
-  task Slew(slew);
-  Slew.resume();
+  //task Slew(slew);
+  //Slew.resume();
   add=50;
   while (true) {
     if(P(ButtonDown))autonomous();

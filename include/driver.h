@@ -28,14 +28,27 @@ void run() {
 	else add = 40;
 
 	int x = ct.Axis3.value(), y = ct.Axis2.value(),z=ct.Axis4.value();
-	if (abs(x) <= 10 && abs(y) <= 10)x = 0, y = 0;
-  if(abs(z)<20)z=0;
-	else if (abs(x - y) < delta)x = y;
-	x = 1.05 * (sign(x) ? 100.0 : -100.0) * pow(1.0 * abs(x / 100.0), 2.0);
-	y = 1.05 * (sign(y) ? 100.0 : -100.0) * pow(1.0 * abs(y / 100.0), 2.0);
 
-  if(z!=0)x=0,y=0;
-  setM(Strafe,z);
+  
+	if (abs(x) <= 10 && abs(y) <= 10)x = 0, y = 0;
+  if(abs(z)<=10)z=0;
+  //if(x!=0 || y!=0)z=0;
+  //if(abs(z)<=20)z=0;
+  if(abs(z)>abs(x)){
+    Left2.setStopping(brakeType::hold);
+    Right2.setStopping(brakeType::hold);
+    setM(Strafe,z);
+    setM(Left2,0);
+    setM(Right2,0);
+  }
+  else {
+    Left2.setStopping(brakeType::coast);
+    Right2.setStopping(brakeType::coast);
+    setM(Left2,x);
+  setM(Right2,y);
+  setM(Strafe,0);
+  }
+  //setM(Strafe,z);
 	//Dead Zone Control and Straight-correction
 
 	if (x < -cap)x = -cap;
@@ -43,10 +56,9 @@ void run() {
 	if (y < -cap)y = -cap;
 	if (y > cap)y = cap;
 	//Sets Target for Slew Rate Task
-	target[0] = x;
-	target[1] = x;
-	target[2] = y;
-	target[3] = y;
+  setM(Left2,x);
+  setM(Right2,y);
+
 
 	//2 Bar
 	if (P(ButtonR1))setM(Lift1, 40), setM(Lift2, 40);
