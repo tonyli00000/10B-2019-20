@@ -70,9 +70,9 @@ void run() {
 	else setM(Deploy, 0);
 
 	//Rollers
-	if (P(ButtonX))setM(Roller, 100);
-	else if (P(ButtonY))setM(Roller, -100);
-	else if (P(ButtonA))setM(Roller, 0);
+	if (P(ButtonX))setM(Roller, 100),setM(Roller2,100);
+	else if (P(ButtonY))setM(Roller, -100),setM(Roller2,-100);
+	else if (P(ButtonA))setM(Roller, 0),setM(Roller2, 0);
 
 	//Any Macros
 }

@@ -9,7 +9,7 @@ motor Right2=motor(PORT20,ratio18_1,true);
 
 motor Strafe=motor(PORT15);
 motor Roller=motor(PORT17);
-
+motor Roller2=motor(PORT4,true);
 motor Lift1=motor(PORT19,true);
 motor Lift2=motor(PORT12);
 motor Deploy=motor(PORT13);
