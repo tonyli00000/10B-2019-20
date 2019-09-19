@@ -71,7 +71,7 @@ void usercontrol( void ) {
 
 int main() {
   //Generate Look-Up Table for Gyro Based Turn Correction
-  genLookUp(0.12, 0.7);
+  genLookUp(0.13, 0.7);
     initScreen(); //Initialization for auton selection program
     Competition.autonomous( autonomous );
     Competition.drivercontrol( usercontrol );

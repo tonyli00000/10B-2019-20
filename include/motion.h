@@ -6,8 +6,12 @@ using namespace std;
 #include "mathutil.h"
 
 //Change This Field if Gyro is inconsistent
-#define USE_GYRO 0
+#define USE_GYRO 1
 #define slewAdd 7
+
+//Change this field for 2/4 motor drive
+#define TWO_MOTOR 1
+
 #define GYRO_THRESHOLD 20
 #define TURN_CONSTANT 7.82
 #define TILE_CONSTANT 1600.0

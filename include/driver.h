@@ -8,6 +8,8 @@
 //Initialization for slew rate control
 void init() {
 	for (int i = 0; i < 4; i++)curr[i] = 0;
+  Roller.setBrake(brakeType::hold);
+  Roller2.setBrake(brakeType::hold);
 }
 
 //2 Different Drive Speeds
@@ -19,6 +21,7 @@ void changeSpeed() {
 bool sign(int x) {
 	return x > 0;
 }
+
 void run() {
 
 	//Drive Base Control
@@ -56,13 +59,12 @@ void run() {
 	if (y < -cap)y = -cap;
 	if (y > cap)y = cap;
 	//Sets Target for Slew Rate Task
-  setM(Left2,x);
-  setM(Right2,y);
-
+  setM(Left,x);
+  setM(Right,y);
 
 	//2 Bar
-	if (P(ButtonR1))setM(Lift1, 40), setM(Lift2, 40);
-	else if (P(ButtonR2))setM(Lift1, -40), setM(Lift2, -40);
+	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
+	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
 	else setM(Lift1, 0), setM(Lift2, 0);
 
 	if (P(ButtonL1))setM(Deploy, 100);
@@ -70,8 +72,8 @@ void run() {
 	else setM(Deploy, 0);
 
 	//Rollers
-	if (P(ButtonX))setM(Roller, 100),setM(Roller2,100);
-	else if (P(ButtonY))setM(Roller, -100),setM(Roller2,-100);
+	if (P(ButtonX))setM(Roller, 70),setM(Roller2,70);
+	else if (P(ButtonY))setM(Roller, -13),setM(Roller2,-13);
 	else if (P(ButtonA))setM(Roller, 0),setM(Roller2, 0);
 
 	//Any Macros
