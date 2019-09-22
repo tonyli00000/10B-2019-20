@@ -22,6 +22,34 @@ bool sign(int x) {
 	return x > 0;
 }
 
+void DeployStack(){
+  setM(Roller,-10);
+  setM(Roller2,-10);
+  wait(100);
+  setM(Roller,0);
+  setM(Roller2,0);
+  Deploy.setStopping(brakeType::hold);
+  
+  setM(Deploy,15);
+  wait(500);
+  setM(Deploy,0);
+  wait(150);
+  setM(Deploy,15);
+  wait(200);
+  setM(Deploy,0);
+  wait(100);
+  setM(Deploy,15);
+wait(1000);
+  setM(Roller,-40);
+  setM(Roller2,-40);
+  wait(200);
+  setM(Lift1,20);
+  setM(Lift2,20);
+  wait(1100);
+  setM(Lift1,0);
+  setM(Lift2,0);
+}
+
 void run() {
 
 	//Drive Base Control
@@ -34,7 +62,7 @@ void run() {
 
   
 	if (abs(x) <= 10 && abs(y) <= 10)x = 0, y = 0;
-  if(abs(z)<=10)z=0;
+  if(abs(z)<=20)z=0;
   //if(x!=0 || y!=0)z=0;
   //if(abs(z)<=20)z=0;
   if(abs(z)>abs(x)){
@@ -67,15 +95,16 @@ void run() {
 	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
 	else setM(Lift1, 0), setM(Lift2, 0);
 
-	if (P(ButtonL1))setM(Deploy, 100);
-	else if (P(ButtonL2))setM(Deploy, -100);
+	if (P(ButtonL1))setM(Deploy, 20),Deploy.setStopping(brakeType::hold);
+	else if (P(ButtonL2))setM(Deploy, -20),Deploy.setStopping(brakeType::coast);
 	else setM(Deploy, 0);
 
 	//Rollers
 	if (P(ButtonX))setM(Roller, 70),setM(Roller2,70);
-	else if (P(ButtonY))setM(Roller, -13),setM(Roller2,-13);
-	else if (P(ButtonA))setM(Roller, 0),setM(Roller2, 0);
+	else if (P(ButtonY))setM(Roller, -46),setM(Roller2,-46);
+	else if (P(ButtonA))setM(Roller, 10),setM(Roller2, 10);
 
+  if(P(ButtonLeft))DeployStack();
 	//Any Macros
 }
 

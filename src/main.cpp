@@ -9,11 +9,12 @@ Test autonselection at competition
 Motion.h: Tune Tile and Turn Constants at actual competition
 Motion.h: Disable gyro if inconsistent or static issues
 Skills.h: Test skills
+Action.h: Go into Depression
 */
 
 //Constants for Auton Selection or Testing
 #define DEBUG 1
-#define AUTON 3
+#define AUTON 1
 using namespace vex;
 using namespace std;
 

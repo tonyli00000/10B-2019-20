@@ -4,3 +4,5 @@ void genLookUp(double seed,double maxx){
 		turn_lookup[i] = seed * exp(k*i/1800);
 	}
 }
+
+
