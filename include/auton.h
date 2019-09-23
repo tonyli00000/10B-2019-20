@@ -13,7 +13,7 @@ void Red1(){
   setM(Roller2,100);
   driveTile(2,35);
   wait(3000);
-  driveTile(-1.5,70);
+  driveTile(-1,70);
   wait(2500);
 
    turnDeg(145);

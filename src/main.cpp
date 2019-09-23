@@ -18,6 +18,9 @@ Action.h: Go into Depression
 using namespace vex;
 using namespace std;
 
+
+task Drive(drivePIDFn);
+task S(slew);
 //Sensor setup
 void pre_auton( void ) {
   //Give robot enough time for gyro calibration
@@ -32,8 +35,7 @@ void pre_auton( void ) {
 
 void autonomous( void ) {
   inUse=true;
-  task Drive(drivePIDFn);
-  task S(slew);
+
   init();
   Drive.resume();
   S.resume();
@@ -54,18 +56,20 @@ void autonomous( void ) {
     case 7:Blue3();
     case 8:Blue4();
   }
+
 }
 
 
 void usercontrol( void ) {
   ct.ButtonUp.released(changeSpeed);
   inUse=false; //Ensuring Autonomous PID doesn't run 
+
+  //Stopping Autonomous Tasks
+  Drive.stop();
+  S.stop();
   init();
-  //task Slew(slew);
-  //Slew.resume();
-  add=50;
+  
   while (true) {
-    if(P(ButtonDown))autonomous();
     run();
   }
 }

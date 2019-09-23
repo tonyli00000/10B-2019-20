@@ -12,6 +12,15 @@ using namespace std;
 //Change this field for 2/4 motor drive
 #define TWO_MOTOR 1
 
+//PID Constants
+#define kp 0.06
+#define kd 0.028
+#define ki 0.0001
+#define kpT 0.18
+#define kdT 0.03
+#define kiT 0.0001
+#define kc 0.13
+
 #define GYRO_THRESHOLD 20
 #define TURN_CONSTANT 7.82
 #define TILE_CONSTANT 1600.0
