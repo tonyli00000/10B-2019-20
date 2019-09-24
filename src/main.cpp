@@ -4,8 +4,8 @@
 
 /*
 Before Comp To-Do: Actually READ this
-Main: Remember to change DEBUG and AUTON for actual competition
-Test autonselection at competition
+Main.h: Remember to change DEBUG and AUTON for actual competition
+Auton.h: Test autonselection at competition
 Motion.h: Tune Tile and Turn Constants at actual competition
 Motion.h: Disable gyro if inconsistent or static issues
 Skills.h: Test skills
@@ -56,7 +56,7 @@ void autonomous( void ) {
     case 7:Blue3();
     case 8:Blue4();
   }
-
+  wait(15000); //Adding wait to prevent other tasks from running
 }
 
 
@@ -83,7 +83,6 @@ int main() {
     pre_auton();
                  
     while(true) {
-
       wait(20);
     }    
 }

@@ -55,3 +55,30 @@ int slew(){
   }
   return 0;
 }
+void DeployStack(){
+  setM(Roller,-10);
+  setM(Roller2,-10);
+  wait(100);
+  setM(Roller,0);
+  setM(Roller2,0);
+  Deploy.setStopping(brakeType::hold);
+  
+  setM(Deploy,15);
+  wait(500);
+  setM(Deploy,0);
+  wait(150);
+  setM(Deploy,15);
+  wait(200);
+  setM(Deploy,0);
+  wait(100);
+  setM(Deploy,15);
+wait(1000);
+  setM(Roller,-40);
+  setM(Roller2,-40);
+  wait(200);
+  setM(Lift1,20);
+  setM(Lift2,20);
+  wait(1100);
+  setM(Lift1,0);
+  setM(Lift2,0);
+}
