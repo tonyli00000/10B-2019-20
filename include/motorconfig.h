@@ -11,7 +11,7 @@ motor Strafe=motor(PORT19);
 motor Roller=motor(PORT17);
 motor Roller2=motor(PORT13,true);
 
-motor Lift1=motor(PORT20,true);
+motor Lift1=motor(PORT15,true);
 motor Lift2=motor(PORT11);
 motor Deploy=motor(PORT12);
 

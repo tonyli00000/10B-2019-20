@@ -6,10 +6,25 @@ void genLookUp(double seed,double maxx){
 }
 
 void init_auton(){
-    setM(Lift1,-30);
-  setM(Lift2,-30);
+
+}
+
+void get4cubes_straight(){
+  setM(Roller,40);
+  setM(Roller2,40);
+  
+  driveTile(2.4,27);
+  wait(300);
   setM(Roller,100);
   setM(Roller2,100);
+  setM(Deploy,0);
+  wait(4000);
 }
+void end_auton(){
+  wait(15000);
+}
+
+
+
 
 

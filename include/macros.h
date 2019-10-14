@@ -13,11 +13,18 @@ using namespace vex;
 #define coast(a) a.stop(brakeType::coast) 
 
 //PID Constants
-
+#define kp 0.06
+#define kd 0.028
+#define ki 0.0001
+#define kpT 0.12
+#define kdT 0.03
+#define kiT 0.0001
+#define kc 0.13
 int curr[4]={0,0,0,0};
 int target[4]={0,0,0,0};
 int add=7;
 const int delta=13;
+bool deploying=false;
 void setLeft(int vel){
   setM(Left,vel);
   setM(Left2,vel);
@@ -55,30 +62,69 @@ int slew(){
   }
   return 0;
 }
-void DeployStack(){
-  setM(Roller,-10);
-  setM(Roller2,-10);
-  wait(100);
-  setM(Roller,0);
-  setM(Roller2,0);
-  Deploy.setStopping(brakeType::hold);
+void reset_deploy(){
+  setM(Deploy,100);
+  wait(800);
+  clear(Deploy);
+  setM(Deploy,-35);
+}
+
+void auton_deploy(int target, int minn_power,int maxx_power,int TT){
+  int error=300;
+  int total_time=0;
+  	
+	int lasterror=0;
+	int totalerror=0;
+  double kp_deploy=0.4,ki_deploy=0.001,kd_deploy=0.001;
+ // wait(400);
+ //setM(Left,5);
+ //setM(Right,5);
+ //Roller.startRotateFor(-420,rotationUnits::deg,-20,velocityUnits::pct);
+ //Roller2.startRotateFor(-420,rotationUnits::deg,-20,velocityUnits::pct);
+   setM(Lift1,-20);
+  setM(Lift2,-20);
+ wait(900);
+//setM(Left,4);
+//setM(Right,4);
+setM(Roller,-3);
+setM(Roller2,-3);
+
+  while(abs(error)>15 && total_time<TT){
+        int dep=Deploy.rotation(rotationUnits::deg)+560;
+        if(dep>500)setM(Deploy,12);
+    else if(dep>400)setM(Deploy,7);
+    else if(dep>350)setM(Deploy,14);
+    else if(dep>300)setM(Deploy,24);
+    else if(dep>200)setM(Deploy,35);
+    else setM(Deploy,50);
+    wait(20);
+    total_time+=20;
+  }
+  setM(Deploy,2);
+  //wait(400);
   
-  setM(Deploy,15);
-  wait(500);
-  setM(Deploy,0);
-  wait(150);
-  setM(Deploy,15);
-  wait(200);
-  setM(Deploy,0);
-  wait(100);
-  setM(Deploy,15);
-wait(1000);
-  setM(Roller,-40);
-  setM(Roller2,-40);
-  wait(200);
-  setM(Lift1,20);
-  setM(Lift2,20);
-  wait(1100);
-  setM(Lift1,0);
-  setM(Lift2,0);
+  setM(Roller,-58);
+  setM(Roller2,-58);
+  setM(Left,-8);
+  setM(Right,-8);
+  setM(Lift1,55);
+  setM(Lift2,55);
+  wait(300);
+
+  wait(2800);
+  setM(Roller,-55);
+  setM(Roller2,-55);
+  setM(Lift1,10);
+  setM(Lift2,10);
+ // wait(4000);
+}
+void auton_deploy(){
+  deploying=true;
+  auton_deploy(0,0,90,2200);
+  deploying=false;
+}
+
+int drive_control(){
+  
+  return 0;
 }

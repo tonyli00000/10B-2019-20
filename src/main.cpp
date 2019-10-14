@@ -4,8 +4,8 @@
 
 /*
 Before Comp To-Do: Actually READ this
-Main.h: Remember to change DEBUG and AUTON for actual competition
-Auton.h: Test autonselection at competition
+Main: Remember to change DEBUG and AUTON for actual competition
+Test autonselection at competition
 Motion.h: Tune Tile and Turn Constants at actual competition
 Motion.h: Disable gyro if inconsistent or static issues
 Skills.h: Test skills
@@ -14,13 +14,10 @@ Action.h: Go into Depression
 
 //Constants for Auton Selection or Testing
 #define DEBUG 1
-#define AUTON 1
+#define AUTON 6
 using namespace vex;
 using namespace std;
 
-
-task Drive(drivePIDFn);
-task S(slew);
 //Sensor setup
 void pre_auton( void ) {
   //Give robot enough time for gyro calibration
@@ -35,10 +32,7 @@ void pre_auton( void ) {
 
 void autonomous( void ) {
   inUse=true;
-
-  init();
-  Drive.resume();
-  S.resume();
+init();
 
   //Taking the selected auton from global variable
   int a=autonomousSelection+1;
@@ -56,33 +50,40 @@ void autonomous( void ) {
     case 7:Blue3();
     case 8:Blue4();
   }
-  wait(15000); //Adding wait to prevent other tasks from running
+  wait(15000);
+  
 }
 
 
 void usercontrol( void ) {
   ct.ButtonUp.released(changeSpeed);
+  //ct.ButtonRight.released(change_lift);
   inUse=false; //Ensuring Autonomous PID doesn't run 
-
-  //Stopping Autonomous Tasks
-  Drive.stop();
-  S.stop();
   init();
-  
+  //task Slew(slew);
+  //Slew.resume();
+  task* P=new task(drive_control);
+  add=50;
+  P->resume();
   while (true) {
+    //if(P(ButtonDown))autonomous();
     run();
   }
 }
 
 int main() {
   //Generate Look-Up Table for Gyro Based Turn Correction
-  genLookUp(0.13, 0.7);
+  
+  genLookUp(0.07, 0.7);
     initScreen(); //Initialization for auton selection program
+    //Brain.Screen.printAt(100,200,"hello");
+    //usercontrol();
     Competition.autonomous( autonomous );
     Competition.drivercontrol( usercontrol );
     pre_auton();
                  
     while(true) {
+
       wait(20);
     }    
 }
