@@ -56,8 +56,9 @@ init();
 
 
 void usercontrol( void ) {
-  ct.ButtonUp.released(changeSpeed);
+  //ct.ButtonUp.released(changeSpeed);
   //ct.ButtonRight.released(change_lift);
+  ct.ButtonB.released(hold_drfb);
   inUse=false; //Ensuring Autonomous PID doesn't run 
   init();
   //task Slew(slew);

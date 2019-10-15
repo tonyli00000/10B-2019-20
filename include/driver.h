@@ -16,7 +16,7 @@ void init() {
 }
 
 //2 Different Drive Speeds
-bool full_speed = true;
+bool full_speed = true,lift_hold=false;
 void changeSpeed() {
 	full_speed = !full_speed;
 }
@@ -43,6 +43,12 @@ void DeployStack(){
   wait(1000);
 
 
+}
+
+void hold_drfb(){
+  lift_hold=!lift_hold;
+  if(lift_hold)Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+  else Lift1.setStopping(brakeType::coast),Lift2.setStopping(brakeType::coast);
 }
 
 void run() {
@@ -96,10 +102,8 @@ void run() {
   
 	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
 	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
-  
-    
 	else setM(Lift1, 0), setM(Lift2, 0);
-
+  
 	if (P(ButtonL1)){
     int dep=Deploy.rotation(rotationUnits::deg)+560;
         if(dep>500)setM(Deploy,3);
@@ -116,16 +120,12 @@ void run() {
 
 
 	//Rollers
-	if (P(ButtonX)){
-    setM(Roller, 100),setM(Roller2,100);
-    intake=true;
-  } else if (P(ButtonY)){
-    setM(Roller, -100),setM(Roller2,-100);
-    intake=false;
-  } else if (P(ButtonA) || intake==false){
-      setM(Roller, 2),setM(Roller2, 2);
-      Roller.setStopping(brakeType::coast);
-      Roller2.setStopping(brakeType::coast);
+	if (P(ButtonX))setM(Roller, 100),setM(Roller2,100);
+  else if (P(ButtonY))setM(Roller, -100),setM(Roller2,-100); 
+  else if (P(ButtonA)){
+      setM(Roller, 0),setM(Roller2, 0);
+      Roller.setStopping(brakeType::hold);
+      Roller2.setStopping(brakeType::hold);
   }
   if(P(ButtonUp))reset_deploy();
   if(P(ButtonDown))auton_deploy();
