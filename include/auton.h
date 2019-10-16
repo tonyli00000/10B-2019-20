@@ -5,6 +5,7 @@ using namespace vex;
 #define LIFT_CONSTANT 1000
 string auton_description[AUTON_NUM]={"Ketchup1","Ketchup2"};
 void Red1(){
+<<<<<<< HEAD
   task Drive(drivePIDFn);
   task S(slew);
   Drive.resume();
@@ -72,6 +73,46 @@ void Red2(){
  Roller2.startRotateFor(-420,rotationUnits::deg,-20,velocityUnits::pct);
   auton_deploy();
   end_auton();
+=======
+  //deploy();
+  //driveTile(-1,10);
+  //wait(400);
+  setM(Lift1,-30);
+  setM(Lift2,-30);
+  reset_deploy();
+  setM(Roller,100);
+  setM(Roller2,100);
+  
+  driveTile(2,20);
+  wait(300);
+  setM(Deploy,0);
+  wait(2500);
+  driveTile(-1,70);
+  wait(1300);
+
+   turnDeg(145);
+   wait(900);
+   driveTile(1,40);
+   wait(1000);
+   auton_deploy(0,15,22,2000);
+  // wait(800);
+  // setM(Deploy,100);
+  // wait(400);
+  // setM(Lift1,-40);
+  // setM(Lift2,-40);
+  // wait(500);
+  // setM(Deploy,0);
+  // setM(Lift1,-0);
+  // setM(Lift2,-0);
+  // driveTile(-2);
+}
+void Red2(){
+ //spline(900,-80);
+  //task dd=task(drivePIDFn);
+  //driveTile(1.25);
+  auton_deploy(0,10,50,1500);
+  wait(15000);
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 }
 void Red3(){
   driveTile(3,90);
@@ -81,7 +122,10 @@ void Red3(){
 }
 void Red4(){
   
+<<<<<<< HEAD
   end_auton();
+=======
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 }
 void Blue1(){
   task Drive(drivePIDFn);

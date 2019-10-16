@@ -45,12 +45,15 @@ void DeployStack(){
 
 }
 
+<<<<<<< HEAD
 void hold_drfb(){
   lift_hold=!lift_hold;
   if(lift_hold)Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
   else Lift1.setStopping(brakeType::coast),Lift2.setStopping(brakeType::coast);
 }
 
+=======
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 void run() {
 
 	//Drive Base Control
@@ -92,17 +95,41 @@ void run() {
 	//Sets Target for Slew Rate Task
   setM(Left,x);
   setM(Right,y);
+<<<<<<< HEAD
   }
   //strafing
 
 
+=======
+  //strafing
+
+  if (P(ButtonLeft))setM(Strafe,-100);
+  else if (P(ButtonRight))setM(Strafe,100);
+  else setM(Strafe, 0);
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 
 
 	//drfb
   
 	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
 	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
+  else if (P(ButtonUp)){
+    if(swapper%2 == 0){
+      Lift1.setStopping(brakeType::hold), Lift2.setStopping(brakeType::hold);
+      //Brain.Screen.print("hold");
+      vex::task::sleep(200);
+      //Brain.Screen.clearScreen();
+    } else {
+      Lift1.setStopping(brakeType::coast), Lift2.setStopping(brakeType::coast);
+      //Brain.Screen.clearScreen();
+      //Brain.Screen.print("coast");
+      vex::task::sleep(200);
+    }
+    swapper++;
+  }
+    
 	else setM(Lift1, 0), setM(Lift2, 0);
+<<<<<<< HEAD
   
 	if (P(ButtonL1)){
     int dep=Deploy.rotation(rotationUnits::deg)+560;
@@ -115,11 +142,16 @@ void run() {
     //setM(Deploy, 100)
     Deploy.setStopping(brakeType::hold);
   }
+=======
+
+	if (P(ButtonL1))setM(Deploy, 100),Deploy.setStopping(brakeType::hold);
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 	else if (P(ButtonL2))setM(Deploy, -100),Deploy.setStopping(brakeType::coast);
 	else setM(Deploy, 0);
 
 
 	//Rollers
+<<<<<<< HEAD
 	if (P(ButtonX))setM(Roller, 100),setM(Roller2,100);
   else if (P(ButtonY))setM(Roller, -100),setM(Roller2,-100); 
   else if (P(ButtonA)){
@@ -129,6 +161,21 @@ void run() {
   }
   if(P(ButtonUp))reset_deploy();
   if(P(ButtonDown))auton_deploy();
+=======
+	if (P(ButtonX)){
+    setM(Roller, 100),setM(Roller2,100);
+    intake=true;
+  } else if (P(ButtonY)){
+    setM(Roller, -70),setM(Roller2,-70);
+    intake=false;
+  } else if (P(ButtonA) || intake==false){
+      setM(Roller, 0),setM(Roller2, 0);
+      Roller.setStopping(brakeType::coast);
+      Roller2.setStopping(brakeType::coast);
+  }
+  if(P(ButtonUp))reset_deploy();
+  if(P(ButtonDown))auton_deploy(0,15,22,2000);
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 	//Any Macros
 }
 

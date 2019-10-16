@@ -32,7 +32,15 @@ void pre_auton( void ) {
 
 void autonomous( void ) {
   inUse=true;
+<<<<<<< HEAD
 init();
+=======
+  task Drive(drivePIDFn);
+  task S(slew);
+  init();
+  Drive.resume();
+  S.resume();
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 
   //Taking the selected auton from global variable
   int a=autonomousSelection+1;
@@ -51,21 +59,33 @@ init();
     case 8:Blue4();
   }
   wait(15000);
+<<<<<<< HEAD
   
+=======
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 }
 
 
 void usercontrol( void ) {
+<<<<<<< HEAD
   //ct.ButtonUp.released(changeSpeed);
   //ct.ButtonRight.released(change_lift);
   ct.ButtonB.released(hold_drfb);
+=======
+  ct.ButtonUp.released(changeSpeed);
+  //ct.ButtonRight.released(change_lift);
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
   inUse=false; //Ensuring Autonomous PID doesn't run 
   init();
   //task Slew(slew);
   //Slew.resume();
+<<<<<<< HEAD
   task* P=new task(drive_control);
   add=50;
   P->resume();
+=======
+  add=50;
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
   while (true) {
     //if(P(ButtonDown))autonomous();
     run();

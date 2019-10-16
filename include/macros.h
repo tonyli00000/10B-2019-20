@@ -64,9 +64,15 @@ int slew(){
 }
 void reset_deploy(){
   setM(Deploy,100);
+<<<<<<< HEAD
   wait(800);
   clear(Deploy);
   setM(Deploy,-35);
+=======
+  wait(1000);
+  clear(Deploy);
+  setM(Deploy,-80);
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 }
 
 void auton_deploy(int target, int minn_power,int maxx_power,int TT){
@@ -75,6 +81,7 @@ void auton_deploy(int target, int minn_power,int maxx_power,int TT){
   	
 	int lasterror=0;
 	int totalerror=0;
+<<<<<<< HEAD
   double kp_deploy=0.4,ki_deploy=0.001,kd_deploy=0.001;
  // wait(400);
  //setM(Left,5);
@@ -127,4 +134,48 @@ void auton_deploy(){
 int drive_control(){
   
   return 0;
+=======
+  int kp_deploy=0.01,ki_deploy=0.001,kd_deploy=0.001;
+  wait(400);
+  setM(Roller,-18);
+  setM(Roller2,-18);
+  setM(Lift1,-20);
+  setM(Lift2,-20);
+  wait(500);
+setM(Roller,-9);
+setM(Roller2,-9);
+  while(abs(error)>15 && total_time<TT){
+    error = target - get(Deploy); //error is target minus actual value
+		
+    //Error Calculations for PID
+		if (error < 0)totalerror = 0;
+
+		if (abs(error) < 500 && error != 0)totalerror += error;
+		else totalerror = 0;
+
+		int deriv = error - lasterror;
+
+    int pw=error * kp_deploy + deriv * kd_deploy + totalerror * ki_deploy; 
+    pw=abs(pw);
+    if(pw<minn_power)pw=minn_power;
+    if(pw>maxx_power)pw=maxx_power;
+    setM(Deploy,maxx_power);
+    wait(20);
+    total_time+=20;
+  }
+  wait(400);
+
+  setM(Roller,-45);
+  setM(Roller2,-45);
+  setM(Lift1,40);
+  setM(Lift2,40);
+  wait(300);
+  setM(Left,-4);
+  setM(Right,-4);
+  wait(2500);
+  setM(Roller,-55);
+  setM(Roller2,-55);
+  setM(Lift1,0);
+  setM(Lift2,0);
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 }

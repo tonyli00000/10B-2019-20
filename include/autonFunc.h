@@ -5,6 +5,7 @@ void genLookUp(double seed,double maxx){
 	}
 }
 
+<<<<<<< HEAD
 void init_auton(){
 
 }
@@ -23,6 +24,10 @@ void get4cubes_straight(){
 void end_auton(){
   wait(15000);
 }
+=======
+
+
+>>>>>>> 7c41c2af683fdfefe8a30886286cb76eae3d2942
 
 
 
