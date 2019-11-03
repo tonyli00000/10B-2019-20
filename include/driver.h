@@ -115,11 +115,9 @@ void run() {
 
 	//drfb
   
-//	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
-//	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
-  
-    
-	//else setM(Lift1, 0), setM(Lift2, 0);
+	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
+	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);  
+	else setM(Lift1, 0), setM(Lift2, 0);
 
 	if (P(ButtonL1)){
     int dep=Deploy.rotation(rotationUnits::deg);

@@ -63,8 +63,8 @@ void autonomous( void ) {
 void usercontrol( void ) {
   ct.ButtonUp.released(changeSpeed);
   ct.ButtonB.released(hold_drfb);
-  ct.ButtonR1.released(lift_tower);
-  ct.ButtonR2.released(lift_tower2);
+  //ct.ButtonR1.released(lift_tower);
+  //ct.ButtonR2.released(lift_tower2);
   inUse=false; //Ensuring Autonomous PID doesn't run 
   init();
 
