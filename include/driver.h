@@ -4,6 +4,9 @@
 #define DESCORE_POS 300
 #define LOW_GOAL 300
 #define HIGH_GOAL 1000
+//bool holdMode = false;
+int swapper = 0;
+bool intake = true;
 
 //Initialization for slew rate control
 void init() {
@@ -13,7 +16,42 @@ void init() {
 }
 
 //2 Different Drive Speeds
-bool full_speed = true;
+bool full_speed = true,lift_hold=false;
+int curr_lift=0; //0=bottom, 1=low towers, 2=high tower
+void lift_tower(){
+  if(curr_lift==0){
+    Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+    Lift1.startRotateFor(LOW_GOAL,rotationUnits::deg);
+    Lift2.startRotateFor(LOW_GOAL,rotationUnits::deg);
+  }
+  if(curr_lift==1){
+    Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+    Lift1.startRotateFor(HIGH_GOAL-LOW_GOAL,rotationUnits::deg);
+    Lift2.startRotateFor(HIGH_GOAL-LOW_GOAL,rotationUnits::deg);
+  }
+  if(curr_lift==2){
+    Lift1.setStopping(brakeType::coast),Lift2.setStopping(brakeType::coast);
+  }
+  curr_lift=(curr_lift+1)%3;
+}
+void lift_tower2(){
+  if(curr_lift==0){
+    Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+    Lift1.startRotateFor(HIGH_GOAL,rotationUnits::deg);
+    Lift2.startRotateFor(HIGH_GOAL,rotationUnits::deg);
+  }
+  if(curr_lift==1){
+    Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+    Lift1.startRotateFor(-LOW_GOAL,rotationUnits::deg);
+    Lift2.startRotateFor(-LOW_GOAL,rotationUnits::deg);
+  }
+  if(curr_lift==2){
+    Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+    Lift1.startRotateFor(-(HIGH_GOAL-LOW_GOAL),rotationUnits::deg);
+    Lift2.startRotateFor(-(HIGH_GOAL-LOW_GOAL),rotationUnits::deg);
+  }
+  curr_lift=(curr_lift-1)%3;
+}
 void changeSpeed() {
 	full_speed = !full_speed;
 }
@@ -21,7 +59,11 @@ void changeSpeed() {
 bool sign(int x) {
 	return x > 0;
 }
-
+void hold_drfb(){
+  lift_hold=!lift_hold;
+  if(lift_hold)Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+  else Lift1.setStopping(brakeType::coast),Lift2.setStopping(brakeType::coast);
+}
 
 
 void run() {
@@ -29,9 +71,11 @@ void run() {
 	//Drive Base Control
 	int cap = 100;
 	//2 Different Speed Modes 100%/70%
-	if (!full_speed)cap = 70, add = 7;
-	else add = 40;
-
+	//if (!full_speed)cap = 70, add = 7;
+	//else add = 40;
+    if (P(ButtonLeft))setM(Strafe,-100),setM(Left,3);
+  else if (P(ButtonRight))setM(Strafe,100),setM(Right,3);
+  else {setM(Strafe, 0);
 	int x = ct.Axis3.value(), y = ct.Axis2.value(),z=ct.Axis4.value();
 
   
@@ -42,7 +86,7 @@ void run() {
   if(abs(z)>abs(x)){
     Left2.setStopping(brakeType::hold);
     Right2.setStopping(brakeType::hold);
-    setM(Strafe,z);
+    //setM(Strafe,z);
     setM(Left2,0);
     setM(Right2,0);
   }
@@ -50,8 +94,8 @@ void run() {
     Left2.setStopping(brakeType::coast);
     Right2.setStopping(brakeType::coast);
     setM(Left2,x);
-  setM(Right2,y);
-  setM(Strafe,0);
+    setM(Right2,y);
+  //setM(Strafe,0);
   }
   //setM(Strafe,z);
 	//Dead Zone Control and Straight-correction
@@ -63,22 +107,51 @@ void run() {
 	//Sets Target for Slew Rate Task
   setM(Left,x);
   setM(Right,y);
+  }
+  //strafing
 
-	//2 Bar
-	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
-	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
-	else setM(Lift1, 0), setM(Lift2, 0);
 
-	if (P(ButtonL1))setM(Deploy, 20),Deploy.setStopping(brakeType::hold);
-	else if (P(ButtonL2))setM(Deploy, -20),Deploy.setStopping(brakeType::coast);
+
+
+	//drfb
+  
+//	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
+//	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);
+  
+    
+	//else setM(Lift1, 0), setM(Lift2, 0);
+
+	if (P(ButtonL1)){
+    int dep=Deploy.rotation(rotationUnits::deg);
+    if(dep>750)setM(Deploy,0);
+    //     if(dep>700)setM(Deploy,12);
+    // else if(dep>600)setM(Deploy,20);
+    // else if(dep>550)setM(Deploy,25);
+    // else if(dep>450)setM(Deploy,29);
+    // else if(dep>350)setM(Deploy,35);
+    // else
+     else setM(Deploy,50);
+    //setM(Deploy, 100)
+    Deploy.setStopping(brakeType::hold);
+  }
+	else if (P(ButtonL2))setM(Deploy, -100),Deploy.setStopping(brakeType::coast);
 	else setM(Deploy, 0);
 
-	//Rollers
-	if (P(ButtonX))setM(Roller, 70),setM(Roller2,70);
-	else if (P(ButtonY))setM(Roller, -46),setM(Roller2,-46);
-	else if (P(ButtonA))setM(Roller, 10),setM(Roller2, 10);
 
-  if(P(ButtonLeft))DeployStack();
+	//Rollers
+  
+	if (P(ButtonX)){
+    setM(Roller, 100),setM(Roller2,100);
+    intake=true;
+    
+  } else if (P(ButtonY)){
+    setM(Roller, -100),setM(Roller2,-100);
+    intake=false;
+  } else if (P(ButtonA) || !intake){
+      setM(Roller, 0),setM(Roller2, 0);
+  }
+  if(P(ButtonUp))reset_deploy();
+  //if(P(ButtonDown))driver_deploy();
 	//Any Macros
 }
 

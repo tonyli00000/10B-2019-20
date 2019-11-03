@@ -12,15 +12,6 @@ using namespace std;
 //Change this field for 2/4 motor drive
 #define TWO_MOTOR 1
 
-//PID Constants
-#define kp 0.06
-#define kd 0.028
-#define ki 0.0001
-#define kpT 0.18
-#define kdT 0.03
-#define kiT 0.0001
-#define kc 0.13
-
 #define GYRO_THRESHOLD 20
 #define TURN_CONSTANT 7.82
 #define TILE_CONSTANT 1600.0
@@ -34,6 +25,7 @@ bool straight = false;
 bool inUse=false;
 int last = 0;
 int currAngle = 0;
+double rto=1.0;
 int drivePIDFn() {
 	clear(Left);
 	clear(Right);
@@ -66,7 +58,6 @@ int drivePIDFn() {
 
 		signLeft = errorLeft / abs(errorLeft); // + or - 1
 		signRight = errorRight / abs(errorRight);
-
 		if (signLeft == signRight) {
       //intended voltage is error times constant
 			voltageLeft = errorLeft * kp + derivLeft * kd + totalerrorLeft * ki; 
@@ -77,25 +68,31 @@ int drivePIDFn() {
 			voltageLeft = errorLeft * kpT + derivLeft * kdT + totalerrorLeft * kiT; 
 			voltageRight = errorRight * kpT + derivRight * kdT + totalerrorRight * kiT;
 		}
-
-    if(voltageLeft>velCap)voltageLeft=velCap;
-    if(voltageLeft<-velCap)voltageLeft=-velCap;
-
-    if(voltageRight>velCap)voltageRight=velCap;
-    if(voltageRight<-velCap)voltageRight=-velCap;
+    // if(abs(targetLeft)==abs(targetRight)){
     
+    // }
     //Slew Rate Control
-		target[0] = voltageLeft;
-		target[2] = voltageRight;
-		if (targetLeft == targetRight && USE_GYRO) {
-			int angle = Gyro.value(rotationUnits::raw);
-			int diff = getDiff(angle, currAngle);
-      double correct=abs(diff)*turn_lookup[abs(diff)];
+    if(abs(targetLeft)!=abs(targetRight)){
+      	voltageLeft = errorLeft * kp + derivLeft * kd + totalerrorLeft * ki; 
+			  voltageRight = errorRight * kp + derivRight * kd + totalerrorRight * ki;    
+      }
+      
+		if (targetLeft == targetRight) {
+        if(voltageLeft>velCap)voltageLeft=velCap;
+       if(voltageLeft<-velCap)voltageLeft=-velCap;
+
+       if(voltageRight>velCap)voltageRight=velCap;
+       if(voltageRight<-velCap)voltageRight=-velCap;
+			// int angle = Gyro.value(rotationUnits::raw);
+			 //int diff = getDiff(angle, currAngle);
+      // double correct=abs(diff)*turn_lookup[abs(diff)];
 			
-				if (diff < 0)target[0] += correct , target[2] -= correct ;
-				else target[0] -= correct , target[2] += correct ;
+			// 	if (diff < 0)target[0] += correct , target[2] -= correct ;
+			// 	else target[0] -= correct , target[2] += correct ;
     }
 
+    target[0] = voltageLeft;
+		target[2] = voltageRight;
 		wait(20);
 	}
 	return 0;
@@ -121,6 +118,14 @@ void turnDeg(double angle,int cap=100){
   velCap=cap;
 }
 
+void swing(int left,int right, double rt){
+  rto=rt;
+  clear(Left);
+  clear(Right);
+  targetLeft=0;targetRight=0;
+ // velCap=100;
+  drive(left,right);
+}
 void swingRight(int pos, int pw) {
 	int error = 300, lasterror = pos, totalerror = 0;
 	Left.resetRotation(); Left2.resetRotation();
@@ -219,24 +224,14 @@ void swingLeft(int pos, int pw) {
 //leftPower and rightPower will control the rate of deviation
 //t_time to use in case when Gyro is not present
 #define spline_constant 4
-void spline(int degrees,int Power,int t_time=0){
+#define s_left 100
+#define s_right 200
+void spline(int LL,int RR,int t_time=0){
   //Making sure that the other autonomous task doesn't interfere
   //task* TT=new task(slew);
-  inUse=false;
-  for(int i=800;i>=0;i-=9){
-    setM(Left,turn_lookup[i]*Power);
-    setM(Left2,turn_lookup[i]*Power);
-    setM(Right,Power);
-    setM(Right2,Power);
-    wait(spline_constant);
+  for(int i=1;i<=8;i++){
+    drive(s_left,s_right);
+    wait(200);
   }
-  for(int i=0;i<800;i+=9){
-    setM(Right,turn_lookup[i]*Power);
-    setM(Right2,turn_lookup[i]*Power);
-    setM(Left,Power);
-    setM(Left2,Power);
-    wait(spline_constant);
-  }
- inUse=true;
 }
 
