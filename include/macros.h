@@ -121,7 +121,17 @@ setM(Roller2,-3);
 }
 void auton_deploy(){
   deploying=true;
-  auton_deploy(0,0,90,2200);
+  for(int i=0;i<250;i++){
+    wait(10);
+    int dep=get(Deploy)-1000;
+        if(dep>1050)setM(Deploy,0);
+         if(dep>700)setM(Deploy,12);
+     else if(dep>600)setM(Deploy,20);
+     else if(dep>550)setM(Deploy,25);
+     else if(dep>450)setM(Deploy,29);
+     else if(dep>350)setM(Deploy,50);
+     else setM(Deploy,100);
+  }
   deploying=false;
 }
 void driver_deploy(){

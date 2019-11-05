@@ -12,13 +12,18 @@ void Red1(task*& Drive, task*& S){
   
   get4cubes_straight();
 
-  swing(-1500,-2400,0.4);
-  wait(1300);
-  swing(-2400,-1500,0.4);
-  wait(1300);
-  driveTile(1.6,50);
+  swing(-2740,-1660,0.4);
+  wait(1710);
+  swing(-1660,-2740,0.4);
+  wait(1710);
+  driveTile(2.1,50);
 
-  wait(5000);
+  wait(2000);
+  turnDeg(160);
+  wait(1500);
+  driveTile(1.6);
+  wait(1100);
+  auton_deploy();
    Drive->stop();
    S->stop();
   // auton_deploy();

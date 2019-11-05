@@ -121,14 +121,14 @@ void run() {
 
 	if (P(ButtonL1)){
     int dep=Deploy.rotation(rotationUnits::deg);
-    if(dep>750)setM(Deploy,0);
+    if(dep>2100)setM(Deploy,0);
     //     if(dep>700)setM(Deploy,12);
     // else if(dep>600)setM(Deploy,20);
     // else if(dep>550)setM(Deploy,25);
     // else if(dep>450)setM(Deploy,29);
     // else if(dep>350)setM(Deploy,35);
     // else
-     else setM(Deploy,50);
+     else setM(Deploy,100);
     //setM(Deploy, 100)
     Deploy.setStopping(brakeType::hold);
   }
@@ -149,6 +149,7 @@ void run() {
       setM(Roller, 0),setM(Roller2, 0);
   }
   if(P(ButtonUp))reset_deploy();
+  if(P(ButtonDown))auton_deploy();
   //if(P(ButtonDown))driver_deploy();
 	//Any Macros
 }

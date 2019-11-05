@@ -8,17 +8,27 @@ void genLookUp(double seed,double maxx){
 void init_auton(){
 
 }
-
-void get4cubes_straight(){
+void get3cubes_straight(){
   setM(Roller,100);
   setM(Roller2,100);
   
-  driveTile(2.4,33);
+  driveTile(2.3,33);
   //wait(300);
   setM(Roller,100);
   setM(Roller2,100);
   setM(Deploy,0);
-  wait(3500);
+  wait(3050);
+}
+void get4cubes_straight(){
+  setM(Roller,100);
+  setM(Roller2,100);
+  
+  driveTile(2.2,50);
+  //wait(300);
+  setM(Roller,100);
+  setM(Roller2,100);
+  setM(Deploy,0);
+  wait(2350);
 }
 void end_auton(){
   wait(15000);
