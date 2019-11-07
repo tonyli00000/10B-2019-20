@@ -12,20 +12,43 @@ void Red1(task*& Drive, task*& S){
   
   get4cubes_straight();
 
-  swing(-2740,-1660,0.4);
-  wait(1710);
-  swing(-1660,-2740,0.4);
-  wait(1710);
-  driveTile(2.1,50);
-
-  wait(2000);
-  turnDeg(160);
+  swing(-2760,-1660,0.4);
   wait(1500);
-  driveTile(1.6);
-  wait(1100);
-  auton_deploy();
-   Drive->stop();
+  swing(-1660,-2760,0.4);
+  wait(1500);
+
+  driveTile(-0.2,50);
+  wait(300);
+  wait(50);
+  clear(Left);
+  clear(Right);
+  targetLeft=0;
+  targetRight=0;
+  driveTile(2.1,37);
+  wait(2400);
+
+  driveTile(-0.85,65);
+  wait(850);
+  turnDeg(155);
+  setM(Roller,100);
+  setM(Roller2,100);
+  wait(900);
+  driveTile(1.2,35);
+  wait(900);
+  Roller.setStopping(brakeType::hold);
+  Roller2.setStopping(brakeType::hold);
+  Roller.startRotateFor(-150,rotationUnits::deg,-10,velocityUnits::pct);
+  Roller2.startRotateFor(-150,rotationUnits::deg,-10,velocityUnits::pct);
+  wait(300);
+  Drive->stop();
    S->stop();
+   setM(Left,10);
+   setM(Right,20);
+   wait(200);
+  auton_deploy();
+  setM(Left,-35);
+  setM(Right,-35);
+  
   // auton_deploy();
 
   end_auton();
@@ -79,8 +102,11 @@ void Red3(task*& Drive, task*& S){
   swing(-2100,-900,0.4);
   end_auton();
 }
+//Prog Skills
 void Red4(task*& Drive, task*& S){
-  
+  Drive->resume();
+  S->resume();
+
   end_auton();
 }
 void Blue1(task*& Drive, task*& S){

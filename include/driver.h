@@ -120,16 +120,14 @@ void run() {
 	else setM(Lift1, 0), setM(Lift2, 0);
 
 	if (P(ButtonL1)){
-    int dep=Deploy.rotation(rotationUnits::deg);
-    if(dep>2100)setM(Deploy,0);
-    //     if(dep>700)setM(Deploy,12);
-    // else if(dep>600)setM(Deploy,20);
-    // else if(dep>550)setM(Deploy,25);
-    // else if(dep>450)setM(Deploy,29);
-    // else if(dep>350)setM(Deploy,35);
-    // else
+     int dep=get(Deploy)-650;
+        if(dep>810)setM(Deploy,0);
+         if(dep>650)setM(Deploy,17);
+     else if(dep>600)setM(Deploy,25);
+     else if(dep>550)setM(Deploy,29);
+     else if(dep>450)setM(Deploy,37);
+     else if(dep>350)setM(Deploy,50);
      else setM(Deploy,100);
-    //setM(Deploy, 100)
     Deploy.setStopping(brakeType::hold);
   }
 	else if (P(ButtonL2))setM(Deploy, -100),Deploy.setStopping(brakeType::coast);

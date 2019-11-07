@@ -26,6 +26,8 @@ bool inUse=false;
 int last = 0;
 int currAngle = 0;
 double rto=1.0;
+bool noPID=false;
+int target_noPID;
 int drivePIDFn() {
 	clear(Left);
 	clear(Right);
@@ -45,6 +47,11 @@ int drivePIDFn() {
     if(!inUse)continue;
 		errorLeft = targetLeft - get(Left); //error is target minus actual value
 		errorRight = targetRight - get(Right);
+    if(noPID){
+      target[0]=target_noPID;
+      target[2]=target_noPID;
+      continue;
+    }
     //Error Calculations for PID
 		if (errorLeft < 0)totalerrorLeft = 0;
 		if (errorRight < 0)totalerrorRight = 0;
@@ -83,12 +90,14 @@ int drivePIDFn() {
 
        if(voltageRight>velCap)voltageRight=velCap;
        if(voltageRight<-velCap)voltageRight=-velCap;
-			// int angle = Gyro.value(rotationUnits::raw);
-			 //int diff = getDiff(angle, currAngle);
-      // double correct=abs(diff)*turn_lookup[abs(diff)];
+       if(USE_GYRO){
+			 int angle = Gyro.value(rotationUnits::raw);
+			 int diff = getDiff(angle, currAngle);
+       double correct=abs(diff)*turn_lookup[abs(diff)];
 			
-			// 	if (diff < 0)target[0] += correct , target[2] -= correct ;
-			// 	else target[0] -= correct , target[2] += correct ;
+			 	if (diff < 0)voltageLeft += correct , voltageRight -= correct ;
+			 	else voltageRight -= correct , voltageRight += correct ;
+       }
     }
 
     target[0] = voltageLeft;
@@ -98,6 +107,14 @@ int drivePIDFn() {
 	return 0;
 }
 
+void simple_drive(int speed,int tt){
+  noPID=true;
+  target_noPID=speed;
+  wait(tt);
+  target[0]=0;
+  target[2]=0;
+  noPID=false;
+}
 void drive(int left, int right) {
 	currAngle = Gyro.value(rotationUnits::raw);
 	if (left == right)straight = true;
@@ -109,6 +126,9 @@ void drive(int left, int right) {
 }
 
 void driveTile(double tiles,int cap=100){
+  clear(Left);
+  clear(Right);
+  targetLeft=targetRight=0;
   drive(tiles*TILE_CONSTANT,tiles*TILE_CONSTANT);
   velCap=cap;
 }

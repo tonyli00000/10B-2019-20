@@ -96,7 +96,7 @@ setM(Roller2,-3);
     else if(dep>400)setM(Deploy,7);
     else if(dep>350)setM(Deploy,12);
     else if(dep>300)setM(Deploy,24);
-    else if(dep>200)setM(Deploy,35);
+    else if(dep>200)setM(Deploy,40);
     else setM(Deploy,50);
     wait(20);
     total_time+=20;
@@ -123,13 +123,13 @@ void auton_deploy(){
   deploying=true;
   for(int i=0;i<250;i++){
     wait(10);
-    int dep=get(Deploy)-1000;
-        if(dep>1050)setM(Deploy,0);
-         if(dep>700)setM(Deploy,12);
-     else if(dep>600)setM(Deploy,20);
-     else if(dep>550)setM(Deploy,25);
-     else if(dep>450)setM(Deploy,29);
-     else if(dep>350)setM(Deploy,50);
+    int dep=get(Deploy)-750;
+        if(dep>810)setM(Deploy,0);
+         if(dep>650)setM(Deploy,10);
+     else if(dep>600)setM(Deploy,15);
+     else if(dep>550)setM(Deploy,20);
+     else if(dep>450)setM(Deploy,30);
+     else if(dep>350)setM(Deploy,40);
      else setM(Deploy,100);
   }
   deploying=false;
