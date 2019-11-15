@@ -1,10 +1,13 @@
 using namespace vex;
+//#define SKILLS 1
 #define PI 3.1415926535
+
 //Macros to make code simpler to read
 #define setM(a,b) a.spin(directionType::fwd,b,velocityUnits::pct)
 #define clear(a) a.resetRotation();
 #define get(a) a.rotation(rotationUnits::raw)
 #define st(a) a.stop(brakeType::brake)
+#define pause(a) setM(a,0)
 #define wait(x) task::sleep(x)
 #define P(x) ct.x.pressing()
 #define MIN(a,b) (((a)<(b))?(a):(b))
@@ -120,38 +123,130 @@ setM(Roller2,-3);
  // wait(4000);
 }
 void auton_deploy(){
+  clear(Deploy);
   deploying=true;
-  for(int i=0;i<250;i++){
+  Deploy.setStopping(brakeType::hold);
+  setM(Left,5);
+  setM(Right,5);
+  for(int i=0;i<240;i++){
     wait(10);
-    int dep=get(Deploy)-750;
-        if(dep>810)setM(Deploy,0);
-         if(dep>650)setM(Deploy,10);
-     else if(dep>600)setM(Deploy,15);
-     else if(dep>550)setM(Deploy,20);
-     else if(dep>450)setM(Deploy,30);
-     else if(dep>350)setM(Deploy,40);
-     else setM(Deploy,100);
+    int dep=get(Deploy)-950;
+        if(dep>665)setM(Deploy,0);
+         if(dep>650)setM(Deploy,17);
+     else if(dep>600)setM(Deploy,29);
+     else if(dep>550)setM(Deploy,33);
+     else if(dep>450)setM(Deploy,40);
+     else if(dep>350)setM(Deploy,50);
+     else setM(Deploy,70);
   }
+  setM(Deploy,-100);
+  wait(210);
+  setM(Deploy,-20);
+  setM(Left,-25);
+  setM(Right,-25);
+  setM(Roller,-44);
+  setM(Roller2,-44);
+  wait(1250);
+
+  setM(Roller,-10);
+  setM(Roller2,-10);
   deploying=false;
 }
-void driver_deploy(){
-  setM(Deploy,2);
-  //wait(400);
-  
-  setM(Roller,-58);
-  setM(Roller2,-58);
-  setM(Left,-8);
-  setM(Right,-8);
-  setM(Lift1,55);
-  setM(Lift2,55);
+void auton_deploy(int sp){
+  clear(Deploy);
+  deploying=true;
+  Deploy.setStopping(brakeType::hold);
+  setM(Left,sp);
+  setM(Right,sp);
+  	//int x = ct.Axis3.value(), y = ct.Axis2.value(),z=ct.Axis4.value();
+  for(int i=0;i<190;i++){
+    
+    wait(10);
+ //wait(10);
+    int dep=Deploy.rotation(rotationUnits::deg);
+    //Brain.Screen.print(dep);
+        if(dep>850)setM(Deploy,0);
+      else if(dep>870)setM(Deploy,35);
+     else if(dep>850)setM(Deploy,45);
+     else if(dep>750)setM(Deploy,33);
+     else if(dep>550)setM(Deploy,40);
+     else if(dep>350)setM(Deploy,50);
+     else setM(Deploy,70);
+  }
+  setM(Roller,-30);
+  setM(Roller2,-30);
   wait(300);
+  setM(Roller,0);
+  setM(Roller2,0);
+  setM(Deploy,-100);
+  wait(910);
+  
+  
+  setM(Deploy,-50);
+  setM(Lift1,-10);
+  setM(Lift2,-10);
+  setM(Roller,-37);
+  setM(Roller2,-37);
+ // wait(100);
+  setM(Left,-20);
+  setM(Right,-20);
+  setM(Deploy,0);
+  wait(600);
 
-  wait(2800);
-  setM(Roller,-55);
-  setM(Roller2,-55);
-  setM(Lift1,10);
-  setM(Lift2,10);
+  wait(900);
+  setM(Roller,-10);
+  setM(Roller2,-10);
+  deploying=false;
 }
+void driver_deploy(bool SKILLS=false){
+  clear(Deploy);
+   deploying=true;
+  Deploy.setStopping(brakeType::hold);
+  setM(Left,4);
+  setM(Right,4);
+  int ttt=0;
+  while((SKILLS && ttt<2900)||(!SKILLS&&(ttt<1000 || !P(ButtonDown)) )){
+    //Brain.Screen.clearScreen();
+    if(P(ButtonL1) || P(ButtonL2)||P(ButtonX))break;
+    if(abs(ct.Axis3.value())>10 || abs(ct.Axis2.value())>10){
+    setM(Left,ct.Axis3.value());
+    setM(Right,ct.Axis2.value());
+    }
+    else setM(Left,5);
+    setM(Right,5);
+    if(P(ButtonY))setM(Roller,-50),setM(Roller2,-50);
+    else setM(Roller,0),setM(Roller2,0);
+    wait(10);
+    int dep=Deploy.rotation(rotationUnits::deg);
+    //Brain.Screen.print(dep);
+        if(dep>860)setM(Deploy,0);
+      else if(dep>870)setM(Deploy,35);
+     else if(dep>800)setM(Deploy,50);
+     else if(dep>750)setM(Deploy,33);
+     else if(dep>550)setM(Deploy,40);
+     else if(dep>350)setM(Deploy,50);
+     else setM(Deploy,70);
+      ttt+=10;
+  }
+  setM(Roller,-40);
+  setM(Roller2,-40);
+  wait(300);
+  setM(Roller,0);
+  setM(Roller2,0);
+  setM(Deploy,-100);
+  wait(910);
+  setM(Deploy,0);
+  setM(Left,-18);
+  setM(Right,-18);
+  setM(Roller,-33);
+  setM(Roller2,-33);
+  wait(1250);
+
+  setM(Roller,-10);
+  setM(Roller2,-10);
+  deploying=false;
+}
+
 int drive_control(){
   
   return 0;

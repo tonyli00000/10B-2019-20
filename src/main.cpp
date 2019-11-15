@@ -14,7 +14,8 @@ Action.h: Go into Depression
 
 //Constants for Auton Selection or Testing
 #define DEBUG 1
-#define AUTON 1
+#define AUTON 4
+
 using namespace vex;
 using namespace std;
 
@@ -27,7 +28,7 @@ void pre_auton( void ) {
   wait(2000);
   Brain.Screen.print("Calibrated");
   while(true){
-          string x=to_string(abs(getDiff(0,Gyro.value(rotationUnits::raw))));
+    string x=to_string(abs(getDiff(0,Gyro.value(rotationUnits::raw))));
     Brain.Screen.printAt(100,100,x.c_str());
   }
 }
@@ -65,6 +66,8 @@ void usercontrol( void ) {
   ct.ButtonB.released(hold_drfb);
   //ct.ButtonR1.released(lift_tower);
   //ct.ButtonR2.released(lift_tower2);
+  ct.ButtonLeft.released(change_straight);
+  //ct.ButtonLeft.released(changeSpeed);
   inUse=false; //Ensuring Autonomous PID doesn't run 
   init();
 
@@ -88,7 +91,7 @@ int main() {
     pre_auton();
                  
     while(true) {
-
+      
       wait(20);
     }    
 }

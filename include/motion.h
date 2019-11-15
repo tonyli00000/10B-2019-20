@@ -117,6 +117,10 @@ void simple_drive(int speed,int tt){
 }
 void drive(int left, int right) {
 	currAngle = Gyro.value(rotationUnits::raw);
+  clear(Left);
+  clear(Right);
+  targetLeft=0;
+  targetRight=0;
 	if (left == right)straight = true;
 	else straight = false;
 	Brain.Screen.print(last);

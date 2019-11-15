@@ -13,11 +13,15 @@ void init() {
 	for (int i = 0; i < 4; i++)curr[i] = 0;
   Roller.setBrake(brakeType::hold);
   Roller2.setBrake(brakeType::hold);
+  Secret.setBrake(brakeType::hold);
 }
 
 //2 Different Drive Speeds
-bool full_speed = true,lift_hold=false;
+bool full_speed = true,lift_hold=false,st=false;
 int curr_lift=0; //0=bottom, 1=low towers, 2=high tower
+void change_straight(){
+  st=!st;
+}
 void lift_tower(){
   if(curr_lift==0){
     Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
@@ -65,17 +69,29 @@ void hold_drfb(){
   else Lift1.setStopping(brakeType::coast),Lift2.setStopping(brakeType::coast);
 }
 
-
+bool ppp=false;
 void run() {
+  if(P(ButtonL1)&&P(ButtonL2) && P(ButtonR1) && P(ButtonR2)){
+    setM(Lift1,100);
+    setM(Lift2,100);
+    wait(500);
 
+    setM(Secret,-100);
+    wait(200);
+    setM(Lift1,10);
+    setM(Lift2,10);
+    return;
+  }
+  else setM(Secret,0);
 	//Drive Base Control
 	int cap = 100;
 	//2 Different Speed Modes 100%/70%
-	//if (!full_speed)cap = 70, add = 7;
+	if (!full_speed)cap = 60, add = 7;
 	//else add = 40;
-    if (P(ButtonLeft))setM(Strafe,-100),setM(Left,3);
-  else if (P(ButtonRight))setM(Strafe,100),setM(Right,3);
-  else {setM(Strafe, 0);
+  if(P(ButtonRight)){
+    setM(Roller,-55),setM(Roller2,-55),setM(Left,-20),setM(Right,-20);
+    return;
+  }
 	int x = ct.Axis3.value(), y = ct.Axis2.value(),z=ct.Axis4.value();
 
   
@@ -93,8 +109,12 @@ void run() {
   else {
     Left2.setStopping(brakeType::coast);
     Right2.setStopping(brakeType::coast);
-    setM(Left2,x);
-    setM(Right2,y);
+    x=1.2*(x/abs(x))*x*x/100.0;
+    y=1.2*(y/abs(y))*y*y/100.0;
+    if(abs(x-y)<10||st)x=y;
+    
+  //  setM(Left2,x);
+   // setM(Right2,y);
   //setM(Strafe,0);
   }
   //setM(Strafe,z);
@@ -107,7 +127,7 @@ void run() {
 	//Sets Target for Slew Rate Task
   setM(Left,x);
   setM(Right,y);
-  }
+  
   //strafing
 
 
@@ -115,23 +135,34 @@ void run() {
 
 	//drfb
   
-	if (P(ButtonR1))setM(Lift1, 100), setM(Lift2, 100);
+	if (P(ButtonR1) && Lift1.rotation(rotationUnits::deg)<1390)setM(Lift1, 100), setM(Lift2, 100);
 	else if (P(ButtonR2))setM(Lift1, -100), setM(Lift2, -100);  
 	else setM(Lift1, 0), setM(Lift2, 0);
-
+int dep=Deploy.rotation(rotationUnits::deg);
 	if (P(ButtonL1)){
-     int dep=get(Deploy)-650;
-        if(dep>810)setM(Deploy,0);
-         if(dep>650)setM(Deploy,17);
-     else if(dep>600)setM(Deploy,25);
-     else if(dep>550)setM(Deploy,29);
-     else if(dep>450)setM(Deploy,37);
+
+    //Brain.Screen.print(dep);
+        if(dep>920)setM(Deploy,0);
+      else if(dep>870)setM(Deploy,35);
+     else if(dep>850)setM(Deploy,45);
+     else if(dep>750)setM(Deploy,33);
+     else if(dep>550)setM(Deploy,40);
      else if(dep>350)setM(Deploy,50);
-     else setM(Deploy,100);
+     else setM(Deploy,70);
     Deploy.setStopping(brakeType::hold);
   }
-	else if (P(ButtonL2))setM(Deploy, -100),Deploy.setStopping(brakeType::coast);
-	else setM(Deploy, 0);
+	else if (P(ButtonL2)){
+    
+    if(dep>870)setM(Deploy,-35);
+     else if(dep>850)setM(Deploy,-45);
+     else if(dep>750)setM(Deploy,-33);
+     else if(dep>550)setM(Deploy,-40);
+     else if(dep>350)setM(Deploy,-50);
+     else if(dep<100)setM(Deploy,0);
+     else setM(Deploy,-70);
+     Deploy.setStopping(brakeType::coast);
+  }
+	else setM(Deploy, -40);
 
 
 	//Rollers
@@ -146,8 +177,10 @@ void run() {
   } else if (P(ButtonA) || !intake){
       setM(Roller, 0),setM(Roller2, 0);
   }
-  if(P(ButtonUp))reset_deploy();
-  if(P(ButtonDown))auton_deploy();
+  if(P(ButtonUp))driver_deploy(true);
+  if(P(ButtonDown))auton_deploy(10);
+  
+  //else setM(Roller,0),setM(Roller2,0),setM(Left,0),setM(Right,0);
   //if(P(ButtonDown))driver_deploy();
 	//Any Macros
 }
