@@ -3,7 +3,7 @@
 using namespace vex;
 #define AUTON_NUM 8
 #define LIFT_CONSTANT 1000
-string auton_description[AUTON_NUM]={"5 Cube Unprotected Red","6 Cube Protected Red","7 Cube Unprotected Red","Blank","5 Cube Unprotected Red","6 Cube Protected Red","7 Cube Unprotected Red","Prog Skills"};
+string auton_description[AUTON_NUM]={"7 Cube Unprotected Red","7 Cube Protected Red","6 Cube Unprotected Red","Prog Skills","7 Cube Unprotected Blue","7 Cube Protected Red","6 Cube Unprotected Red","BLANK"};
 void Red1(task*& Drive, task*& S,bool prog=false){
   Drive->resume();
   S->resume();
@@ -94,7 +94,7 @@ void Red1(task*& Drive, task*& S,bool prog=false){
 void Red2(task*& Drive, task*& S){
   Drive->resume();
   S->resume();
-setM(Deploy,100);
+  setM(Deploy,100);
   wait(800);
   setM(Deploy,-100);
   wait(600);
@@ -104,9 +104,9 @@ setM(Deploy,100);
   setM(Lift2,-30);
 
   setM(Deploy,0);
-setM(Roller,50);
-setM(Roller2,50);
-  driveTile(1.29,31);
+  setM(Roller,50);
+  setM(Roller2,50);
+  driveTile(1.32,33);
   wait(840); 
   Lift1.startRotateFor(LIFT_CONSTANT,rotationUnits::deg,100,velocityUnits::pct);
   Lift2.startRotateFor(LIFT_CONSTANT,rotationUnits::deg,100,velocityUnits::pct);
@@ -114,26 +114,27 @@ setM(Roller2,50);
   setM(Roller,100);
   setM(Roller2,100);
   setM(Deploy,0);
-  setM(Lift1,-40);
-  setM(Lift2,-40);
+  setM(Lift1,-30);
+  setM(Lift2,-30);
   wait(1200);
-  driveTile(0.1,3);
+  driveTile(0.1,7);
   wait(1100);
   setM(Lift1,0);
   setM(Lift2,0);
   wait(400);
-  turnDeg(-141);
+  turnDeg(-133);
   wait(1500);
-  driveTile(1.8,32);
+  driveTile(1.73,30);
   wait(2700);
-  setM(Roller,0);
-  setM(Roller2,0);
+  setM(Roller,30);
+  setM(Roller2,30);
   Drive->stop();
   S->stop();
   setM(Left,3);
   setM(Right,3);
-
-  auton_deploy(1);
+  setM(Roller,0);
+  setM(Roller2,0);
+  auton_deploy(8);
   end_auton();
 }
 void Red3(task*& Drive, task*& S,bool skills=false){
@@ -166,32 +167,32 @@ void Red3(task*& Drive, task*& S,bool skills=false){
   S->resume();
   //setM(Deploy,100);
   get3cubes_straight();
-  turnDeg(-30);
+  turnDeg(-20);
   wait(600);
   driveTile(0.5,35);
   wait(1000);
-  turnDeg(30);
+  turnDeg(20);
   wait(600);
-  driveTile(-1.02,55);
+  driveTile(-1.06,55);
   wait(600);
   
-  wait(1200);
-    
+  wait(920);
+    if(skills)wait(300);
   turnDeg(140,50);
-
-  wait(1500);
-  Roller.startRotateFor(-100,rotationUnits::deg,-20,velocityUnits::pct);
-  Roller2.startRotateFor(-100,rotationUnits::deg,-20,velocityUnits::pct);
-  driveTile(1.14,55);
+  if(skills)wait(150);
+  wait(1350);
+  //Roller.startRotateFor(-50,rotationUnits::deg,-20,velocityUnits::pct);
+  //Roller2.startRotateFor(-50,rotationUnits::deg,-20,velocityUnits::pct);
+  driveTile(1.14,53);
  // setM(Roller,0);
   //setM(Roller2,0);
   wait(1300);
   Drive->suspend();
   S->suspend();
-  setM(Left,-21);
-  setM(Right,-21);
-    setM(Roller,-15);
-  setM(Roller2,-15);
+  setM(Left,-25);
+  setM(Right,-25);
+    setM(Roller,-20);
+  setM(Roller2,-20);
   wait(250);
   if(skills){
     setM(Roller,0);
@@ -208,7 +209,7 @@ void Red3(task*& Drive, task*& S,bool skills=false){
   setM(Lift1,-30);
   setM(Lift2,-30);
   if(skills)driver_deploy(true);
-  else auton_deploy(5);
+  else auton_deploy(2);
   //wait(100);
   
   setM(Left,-35);
@@ -219,8 +220,8 @@ void Red3(task*& Drive, task*& S,bool skills=false){
 void Red4(task*& Drive, task*& S){
   Red3(Drive,S,true);
   //wait(1200);
-  setM(Lift1,-60);
-  setM(Lift2,-60);
+  setM(Lift1,-30);
+  setM(Lift2,-30);
   setM(Left,0);
   setM(Right,0);
 
@@ -230,8 +231,8 @@ void Red4(task*& Drive, task*& S){
 
   driveTile(-0.2,60);
   wait(1000);
-  setM(Lift1,0);
-  setM(Lift2,0);
+  //setM(Lift1,0);
+  //setM(Lift2,0);
   turnDeg(-53,60);
   wait(1200);
 
@@ -240,10 +241,13 @@ void Red4(task*& Drive, task*& S){
   turnDeg(-92,40);
   wait(1300);
   driveTile(-1,35);
+  
   wait(2000);
   reset_drive();
   setM(Roller,100);
   setM(Roller2,100);
+  setM(Lift1,-30);
+  setM(Lift2,-30);
   driveTile(1.8,35);
 
   wait(3000);
@@ -253,11 +257,10 @@ void Red4(task*& Drive, task*& S){
   wait(2000);
   turnDeg(32,30);
   wait(2000);
-  setM(Lift1,100);
-  setM(Lift2,100);
+ LIFT(900);
   Lift1.setStopping(brakeType::hold);
   Lift2.setStopping(brakeType::hold);
-  driveTile(0.65,25);
+  driveTile(0.58,25);
   wait(1000);
   setM(Lift1,0);
   setM(Lift2,0);
@@ -288,10 +291,10 @@ void Red4(task*& Drive, task*& S){
   turnDeg(-90,40);
   wait(2000);
   LIFT(850);
-  driveTile(0.2,25);
-  wait(200);
-    setM(Roller,-60);
-  setM(Roller2,-60);
+  driveTile(0.2,20);
+  wait(450);
+    setM(Roller,-50);
+  setM(Roller2,-50);
   wait(600);
   setM(Roller,0);
   setM(Roller2,0);
@@ -307,12 +310,12 @@ void Red4(task*& Drive, task*& S){
   LIFT(750);
   setM(Lift1,0);
   setM(Lift2,0);
-  driveTile(1.7,25);
+  driveTile(1.3,25);
   wait(4000);
-  setM(Roller,-60);
-  setM(Roller2,-60);
+  setM(Roller,-100);
+  setM(Roller2,-100);
   wait(1000);
-  driveTile(-1);
+  driveTile(-1,24);
   end_auton();
 }
 void Blue1(task*& Drive, task*& S){
@@ -381,112 +384,135 @@ void Blue1(task*& Drive, task*& S){
   end_auton();
 }
 void Blue2(task*& Drive, task*& S){
-  Drive->resume();
-  S->resume();
-
-  setM(Lift1,-30);
-  setM(Lift2,-30);
-
-  reset_deploy();
-  setM(Roller,80);
-  setM(Roller2,80);
-  wait(800);
-
-  setM(Deploy,0);
-  wait(200);
-
-  driveTile(1.29,35);
-  wait(600); 
-  Lift1.startRotateFor(LIFT_CONSTANT,rotationUnits::deg,100,velocityUnits::pct);
-  Lift2.startRotateFor(LIFT_CONSTANT,rotationUnits::deg,100,velocityUnits::pct);
-  wait(1950);
-  setM(Deploy,0);
-  setM(Lift1,-20);
-  setM(Lift2,-20);
-  wait(2000);
-  driveTile(0.2,7);
-  wait(1600);
-  setM(Lift1,0);
-  setM(Lift2,0);
-  wait(400);
-  turnDeg(142);
-  wait(1500);
-  driveTile(1.39,70);
-  //Roller.startRotateFor(-240,rotationUnits::deg,-30,velocityUnits::pct);
-  //Roller2.startRotateFor(-240,rotationUnits::deg,-30,velocityUnits::pct);
-
-  wait(2000);
-  Drive->stop();
-  S->stop();
-    setM(Roller,10);
-  setM(Roller2,10);
-  setM(Left,15);
-  setM(Right,15);
-  auton_deploy(14);
-  end_auton();
-  end_auton();
-}
-void Blue3(task*& Drive, task*& S){
   Drive->suspend();
   S->suspend();
   setM(Left,-20);
   setM(Right,-20);
-  setM(Lift1,-25);
-  setM(Lift2,-25);
-  setM(Roller,20);
-  setM(Roller2,20);
+  
+  
   setM(Deploy,100);
-  wait(750);
+  wait(700);
   setM(Deploy,-100);
-  //setM(Lift2,-30);
-  wait(800);
-  setM(Deploy,-20);
+  wait(700);
+  setM(Roller,40);
+  setM(Roller2,40);
+  setM(Lift1,-30);
+  setM(Lift2,-30);
+Drive->resume();
+  S->resume();
+  setM(Deploy,0);
   setM(Roller,100);
   setM(Roller2,100);
-  //wait(600);
+  driveTile(1.355,34);
+  wait(850); 
+  Lift1.startRotateFor(LIFT_CONSTANT,rotationUnits::deg,100,velocityUnits::pct);
+  Lift2.startRotateFor(LIFT_CONSTANT,rotationUnits::deg,100,velocityUnits::pct);
+  setM(Roller,60);
+  setM(Roller2,60);
+  wait(1270);
+  setM(Roller,100);
+  setM(Roller2,100);
   setM(Deploy,0);
-  //setM(Deploy,100);
-  Drive->resume();
-  S->resume();
-  get3cubes_straight();
-  turnDeg(30,60);
-  wait(700);
-  driveTile(0.6,45);
-  wait(900);
-  turnDeg(-30);
-  wait(550);
-  //setM(Lift1,100);
-  //setM(Lift2,100);
-  driveTile(-1.03,55);
-  wait(800);
-  setM(Lift1,0);
-  setM(Lift2,0);
-  setM(Roller,15);
-  setM(Roller2,15);
-  wait(600);
-  turnDeg(-140,55);
-  wait(1650);
-  driveTile(1.14,55);
-  //setM(Roller,100);
-  //setM(Roller2,100);
-Roller.startRotateFor(-200, rotationUnits::deg,-20,velocityUnits::pct);
-Roller2.startRotateFor(-200, rotationUnits::deg,-20,velocityUnits::pct);
+  setM(Lift1,-30);
+  setM(Lift2,-30);
+  wait(1200);
+  driveTile(0.1,10);
   wait(1100);
-  Drive->suspend();
-  S->suspend();
-  setM(Left,22);
-  setM(Right,30);
-    setM(Roller,-15);
-  setM(Roller2,-15);
-  wait(150);
+  setM(Lift1,-20);
+  setM(Lift2,-20);
+  wait(400);
+  turnDeg(130);
+  wait(1440);
+  driveTile(1.75,31);
+  wait(2500);
   setM(Roller,0);
   setM(Roller2,0);
-  auton_deploy(7);
+  Drive->stop();
+  S->stop();
+  setM(Left,3);
+  setM(Right,3);
+
+  auton_deploy(1);
+  end_auton();
+}
+void Blue3(task*& Drive, task*& S,bool skills=false){
+  Drive->suspend();
+  S->suspend();
+  setM(Left,-20);
+  setM(Right,-20);
+
+  setM(Lift1,-30);
+  setM(Lift2,-30);
+  setM(Deploy,100);
+  wait(800);
+  setM(Deploy,-100);
+  //setM(Lift2,-30);
+  wait(300);
+  setM(Lift1,-10);
+  setM(Lift2,-10);
+  setM(Roller,50);
+  setM(Roller2,50);
+  //wait(600);
+  if(skills){
+    wait(300);
+    setM(Deploy,0);
+    wait(700);
+  }
+  else wait(100),setM(Deploy,-20);
+    setM(Roller,100);
+  setM(Roller2,100);
+  Drive->resume();
+  S->resume();
+  //setM(Deploy,100);
+  get3cubes_straight();
+  turnDeg(20);
+  wait(600);
+  driveTile(0.5,35);
+  wait(1000);
+  turnDeg(-20);
+  wait(600);
+  driveTile(-1.06,55);
+  wait(600);
+  
+  wait(1020);
+    
+  turnDeg(-142,55);
+
+  wait(1300);
+  Roller.startRotateFor(-100,rotationUnits::deg,-20,velocityUnits::pct);
+  Roller2.startRotateFor(-100,rotationUnits::deg,-20,velocityUnits::pct);
+  driveTile(1.14,55);
+ // setM(Roller,0);
+  //setM(Roller2,0);
+  wait(1120);
+  Drive->suspend();
+  S->suspend();
+  setM(Left,-23);
+  setM(Right,-23);
+    setM(Roller,-20);
+  setM(Roller2,-20);
+  wait(250);
+  if(skills){
+    setM(Roller,0);
+    setM(Roller2,0);
+    setM(Left,-4);
+    setM(Right,-4);
+    wait(500);
+    setM(Left,0);
+    setM(Right,0);
+    wait(500);
+  }
+  setM(Roller,0);
+  setM(Roller2,0);
+  setM(Lift1,-30);
+  setM(Lift2,-30);
+  if(skills)driver_deploy(true);
+  else auton_deploy(1);
   //wait(100);
   
-  setM(Left,-35);
-  setM(Right,-35);
-  end_auton();
+  setM(Left,-25);
+  setM(Right,-25);
+  if(!skills)end_auton();
 }
 void Blue4(task*& Drive, task*& S){
   Drive->resume();

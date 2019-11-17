@@ -65,7 +65,10 @@ bool sign(int x) {
 }
 void hold_drfb(){
   lift_hold=!lift_hold;
-  if(lift_hold)Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+  if(lift_hold){
+    Lift1.setStopping(brakeType::hold),Lift2.setStopping(brakeType::hold);
+    ct.rumble("--");
+  }
   else Lift1.setStopping(brakeType::coast),Lift2.setStopping(brakeType::coast);
 }
 
@@ -100,21 +103,21 @@ void run() {
   //if(x!=0 || y!=0)z=0;
   //if(abs(z)<=20)z=0;
   if(abs(z)>abs(x)){
-    Left2.setStopping(brakeType::hold);
-    Right2.setStopping(brakeType::hold);
+    Left.setStopping(brakeType::hold);
+    Right.setStopping(brakeType::hold);
     //setM(Strafe,z);
-    setM(Left2,0);
-    setM(Right2,0);
+    setM(Left,0);
+    setM(Right,0);
   }
   else {
-    Left2.setStopping(brakeType::coast);
-    Right2.setStopping(brakeType::coast);
+    Left.setStopping(brakeType::coast);
+    Right.setStopping(brakeType::coast);
     x=1.2*(x/abs(x))*x*x/100.0;
     y=1.2*(y/abs(y))*y*y/100.0;
     if(abs(x-y)<10||st)x=y;
     
-  //  setM(Left2,x);
-   // setM(Right2,y);
+  //  setM(Left,x);
+   // setM(Right,y);
   //setM(Strafe,0);
   }
   //setM(Strafe,z);
@@ -158,11 +161,11 @@ int dep=Deploy.rotation(rotationUnits::deg);
      else if(dep>750)setM(Deploy,-33);
      else if(dep>550)setM(Deploy,-40);
      else if(dep>350)setM(Deploy,-50);
-     else if(dep<100)setM(Deploy,0);
+     else if(dep<100)setM(Deploy,-30);
      else setM(Deploy,-70);
      Deploy.setStopping(brakeType::coast);
   }
-	else setM(Deploy, -40);
+	else setM(Deploy, 0);
 
 
 	//Rollers
@@ -178,7 +181,7 @@ int dep=Deploy.rotation(rotationUnits::deg);
       setM(Roller, 0),setM(Roller2, 0);
   }
   if(P(ButtonUp))driver_deploy(true);
-  if(P(ButtonDown))auton_deploy(10);
+  if(P(ButtonDown))driver_deploy(false);
   
   //else setM(Roller,0),setM(Roller2,0),setM(Left,0),setM(Right,0);
   //if(P(ButtonDown))driver_deploy();

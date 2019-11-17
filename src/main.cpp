@@ -13,8 +13,8 @@ Action.h: Go into Depression
 */
 
 //Constants for Auton Selection or Testing
-#define DEBUG 1
-#define AUTON 4
+#define DEBUG 0
+#define AUTON 7
 
 using namespace vex;
 using namespace std;
@@ -24,13 +24,7 @@ task* S;
 //Sensor setup
 void pre_auton( void ) {
   //Give robot enough time for gyro calibration
-  Gyro.startCalibration();
-  wait(2000);
-  Brain.Screen.print("Calibrated");
-  while(true){
-    string x=to_string(abs(getDiff(0,Gyro.value(rotationUnits::raw))));
-    Brain.Screen.printAt(100,100,x.c_str());
-  }
+  Deploy.setMaxTorque(85,percentUnits::pct);
 }
 
 void autonomous( void ) {

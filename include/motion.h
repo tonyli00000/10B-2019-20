@@ -152,12 +152,12 @@ void swing(int left,int right, double rt){
 }
 void swingRight(int pos, int pw) {
 	int error = 300, lasterror = pos, totalerror = 0;
-	Left.resetRotation(); Left2.resetRotation();
-	Right.resetRotation(); Right2.resetRotation();
+	Left.resetRotation(); Left.resetRotation();
+	Right.resetRotation(); Right.resetRotation();
 	Left.setStopping(brakeType::brake);
 	Right.setStopping(brakeType::brake);
-	Left2.setStopping(brakeType::brake);
-	Right2.setStopping(brakeType::brake);
+	Left.setStopping(brakeType::brake);
+	Right.setStopping(brakeType::brake);
 	int t = 0;
 
 	while (abs(error) > 10) {
@@ -179,11 +179,11 @@ void swingRight(int pos, int pw) {
 		if (RightPower <= -100)RightPower = -100;
 
 		setM(Right, RightPower);
-		setM(Right2, RightPower);
+		setM(Right, RightPower);
 
 		setM(Left, RightPower / 100.0 * pw);
 
-		setM(Left2, RightPower / 100.0 * pw);
+		setM(Left, RightPower / 100.0 * pw);
 
 		lasterror = error;
 		t += 5;
@@ -191,18 +191,18 @@ void swingRight(int pos, int pw) {
 		wait(5);
 	}
 	setM(Left, 0);
-	setM(Right2, 0);
-	setM(Left2, 0);
+	setM(Right, 0);
+	setM(Left, 0);
 	setM(Right, 0);
 }
 void swingLeft(int pos, int pw) {
 	int error = 300, lasterror = pos, totalerror = 0;
-	Left.resetRotation(); Left2.resetRotation();
-	Right.resetRotation(); Right2.resetRotation();
+	Left.resetRotation(); Left.resetRotation();
+	Right.resetRotation(); Right.resetRotation();
 	Left.setStopping(brakeType::brake);
 	Right.setStopping(brakeType::brake);
-	Left2.setStopping(brakeType::brake);
-	Right2.setStopping(brakeType::brake);
+	Left.setStopping(brakeType::brake);
+	Right.setStopping(brakeType::brake);
 	int t = 0;
 
 	while (abs(error) > 10) {
@@ -226,11 +226,11 @@ void swingLeft(int pos, int pw) {
 
 		//Setting Motor Values
 		setM(Left, LeftPower);
-		setM(Left2, LeftPower);
+		setM(Left, LeftPower);
 
 		setM(Right, LeftPower / 100.0 * pw);
 
-		setM(Right2, LeftPower / 100.0 * pw);
+		setM(Right, LeftPower / 100.0 * pw);
 
 		lasterror = error;
 		t += 5;
@@ -238,8 +238,8 @@ void swingLeft(int pos, int pw) {
 		wait(5);
 	}
 	setM(Left, 0);
-	setM(Right2, 0);
-	setM(Left2, 0);
+	setM(Right, 0);
+	setM(Left, 0);
 	setM(Right, 0);
 }
 
