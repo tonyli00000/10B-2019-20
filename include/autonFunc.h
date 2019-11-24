@@ -4,9 +4,17 @@ void genLookUp(double seed,double maxx){
 		turn_lookup[i] = seed * exp(k*i/1800);
 	}
 }
-
+//Flip out
 void init_auton(){
-
+  //setRoller(20);
+  setLeft(-20);
+  setRight(-20);
+  setM(Deploy,10);
+  setM(Lift1,100);
+  wait(650);
+  setM(Lift1,-30);
+  setM(Deploy,0);
+  wait(440);
 }
 void reset_drive(){
   clear(Left);
@@ -14,40 +22,38 @@ void reset_drive(){
   targetLeft=0;
   targetRight=0;
 }
-void LIFT(int deg){
-  while(Lift1.position(rotationUnits::deg)<deg)setM(Lift1,100),setM(Lift2,100);
-  setM(Lift1,0);setM(Lift2,0);
-}
+
 void get3cubes_straight(){
    setM(Roller,100);
   setM(Roller2,100);
   
-  driveTile(1.775,40);
-  wait(400);
+  driveTile(1.6,60);
+  wait(700);
+  setM(Lift1,-20);
   setM(Deploy,-20);
-  //wait(300);
+  //wait(300)
   setM(Roller,100);
   setM(Roller2,100);
   setM(Deploy,0);
   //wait(2050);
 
-  wait(2120);
+  wait(1480);
 }
 void get4cubes_straight(){
   setM(Roller,100);
   setM(Roller2,100);
   
-  driveTile(2.2,50);
+  driveTile(2.0,60);
   wait(300);
   setM(Deploy,-20);
   //wait(300);
   setM(Roller,100);
   setM(Roller2,100);
   setM(Deploy,0);
-  wait(2050);
+  wait(1650);
 }
 void end_auton(){
-  wait(15000);
+  wait(60000);
 }
 
 

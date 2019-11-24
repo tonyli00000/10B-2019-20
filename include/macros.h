@@ -6,21 +6,22 @@ using namespace vex;
 #define setM(a,b) a.spin(directionType::fwd,b,velocityUnits::pct)
 #define clear(a) a.resetRotation();
 #define get(a) a.rotation(rotationUnits::raw)
+#define get2(a) a.rotation(rotationUnits::deg)
 #define st(a) a.stop(brakeType::brake)
 #define pause(a) setM(a,0)
 #define wait(x) task::sleep(x)
 #define P(x) ct.x.pressing()
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
-#define hold(a) a.stop(brakeType::hold)
-#define coast(a) a.stop(brakeType::coast) 
+#define hold(a) a.setStopping(brakeType::hold)
+#define coast(a) a.setStopping(brakeType::coast) 
 
 //PID Constants
-#define kp 0.06
-#define kd 0.028
-#define ki 0.0001
-#define kpT 0.12
-#define kdT 0.03
+#define kp 0.062
+#define kd 0.014
+#define ki 0.0011
+#define kpT 0.08
+#define kdT 0.02
 #define kiT 0.0001
 #define kc 0.13
 int curr[4]={0,0,0,0};
@@ -28,13 +29,54 @@ int target[4]={0,0,0,0};
 int add=7;
 const int delta=13;
 bool deploying=false;
+
+void set_deploy(){
+  int dep=abs(Deploy.rotation(rotationUnits::deg));
+   if(dep>1320)setM(Deploy,0);
+   else if(dep>1150)setM(Deploy,35);
+      else if(dep>870)setM(Deploy,53);
+     else if(dep>850)setM(Deploy,60);
+     else if(dep>750)setM(Deploy,55);
+     else if(dep>550)setM(Deploy,70);
+     else if(dep>350)setM(Deploy,90);
+     else setM(Deploy,100);
+    Deploy.setStopping(brakeType::hold);
+}
+void set_deploy2(){
+  int dep=abs(Deploy.rotation(rotationUnits::deg));
+   if(dep>870)setM(Deploy,-60);
+     else if(dep>850)setM(Deploy,-70);
+     else if(dep>750)setM(Deploy,-80);
+     else if(dep>550)setM(Deploy,-90);
+     else if(dep>350)setM(Deploy,-100);
+     else if(dep<100)setM(Deploy,-100);
+     else setM(Deploy,-70);
+     Deploy.setStopping(brakeType::coast);
+}
 void setLeft(int vel){
   setM(Left,vel);
-  setM(Left,vel);
+  setM(Left2,vel);
 }
 void setRight(int vel){
   setM(Right,vel);
-  setM(Right,vel);
+  setM(Right2,vel);
+}
+void setLift(int vel){
+  setM(Lift1,vel);
+}
+void LIFT(int deg){
+  int tt=0;
+  while(Lift1.position(rotationUnits::deg)<deg && tt<3000)setLift(100),wait(10),tt+=10;
+  setLift(0);
+}
+void LIFT2(){
+  int tt=0;
+  while(Lift1.position(rotationUnits::deg)>50 && tt<3000)setLift(-40),wait(10),tt+=10;
+  setLift(0);
+}
+void setRoller(int vel){
+  setM(Roller,vel);
+  setM(Roller2,vel);
 }
 bool neg(int a){
   return a<0;
@@ -66,62 +108,11 @@ int slew(){
   return 0;
 }
 void reset_deploy(){
-  //setM(Deploy,100);
-  //wait(700);
   clear(Deploy);
   wait(100);
-  //setM(Deploy,-35);
 }
 
-void auton_deploy(int target, int minn_power,int maxx_power,int TT){
-  int error=300;
-  int total_time=0;
-  	
-	int lasterror=0;
-	int totalerror=0;
-  double kp_deploy=0.4,ki_deploy=0.001,kd_deploy=0.001;
- // wait(400);
- //setM(Left,5);
- //setM(Right,5);
- //Roller.startRotateFor(-420,rotationUnits::deg,-20,velocityUnits::pct);
- //Roller2.startRotateFor(-420,rotationUnits::deg,-20,velocityUnits::pct);
-   setM(Lift1,-20);
-  setM(Lift2,-20);
- wait(900);
-//setM(Left,4);
-//setM(Right,4);
-setM(Roller,-3);
-setM(Roller2,-3);
 
-  while(abs(error)>15 && total_time<TT){
-        int dep=Deploy.rotation(rotationUnits::deg)+560;
-        if(dep>500)setM(Deploy,10);
-    else if(dep>400)setM(Deploy,7);
-    else if(dep>350)setM(Deploy,12);
-    else if(dep>300)setM(Deploy,24);
-    else if(dep>200)setM(Deploy,40);
-    else setM(Deploy,50);
-    wait(20);
-    total_time+=20;
-  }
-  setM(Deploy,2);
-  //wait(400);
-  
-  setM(Roller,-58);
-  setM(Roller2,-58);
-  setM(Left,-8);
-  setM(Right,-8);
-  setM(Lift1,55);
-  setM(Lift2,55);
-  wait(300);
-
-  wait(2800);
-  setM(Roller,-55);
-  setM(Roller2,-55);
-  setM(Lift1,10);
-  setM(Lift2,10);
- // wait(4000);
-}
 void auton_deploy(){
   clear(Deploy);
   deploying=true;
@@ -153,49 +144,39 @@ void auton_deploy(){
   deploying=false;
 }
 void auton_deploy(int sp){
-  clear(Deploy);
+  //clear(Deploy);
   deploying=true;
   setM(Left,sp);
   setM(Right,sp);
   	//int x = ct.Axis3.value(), y = ct.Axis2.value(),z=ct.Axis4.value();
-  for(int i=0;i<=190/3;i++){
+  for(int i=0;i<=200/3;i++){
     
     wait(30);
  //wait(10);
     int dep=Deploy.rotation(rotationUnits::deg);
-    //Brain.Screen.print(dep);
-        if(dep>920)setM(Deploy,0);
+      if(dep>1220)setM(Deploy,0);
+      else if(dep>1150)setM(Deploy,20);
+   else if(dep>950)setM(Deploy,30);
       else if(dep>870)setM(Deploy,35);
-     else if(dep>850)setM(Deploy,45);
-     else if(dep>750)setM(Deploy,33);
-     else if(dep>550)setM(Deploy,40);
-     else if(dep>350)setM(Deploy,50);
-     else setM(Deploy,70);
+     else if(dep>850)setM(Deploy,40);
+     else if(dep>750)setM(Deploy,55);
+     else if(dep>550)setM(Deploy,60);
+     else if(dep>350)setM(Deploy,70);
+     else setM(Deploy,100);
   }
-  setM(Roller,-35);
-  setM(Roller2,-35);
-  wait(300);
-  setM(Roller,0);
-  setM(Roller2,0);
+  setM(Deploy,10);
+  setRoller(-20);
+  setLeft(17);
+  setRight(17);
   wait(200);
-  setM(Deploy,-100);
-  wait(910);
-  
-  
-  setM(Deploy,-50);
-  setM(Lift1,-10);
-  setM(Lift2,-10);
-  setM(Roller,-33);
-  setM(Roller2,-33);
- // wait(100);
-  setM(Left,-23);
-  setM(Right,-23);
+  setLeft(0);
+  setRight(0);
+  setRoller(0);
+  wait(100);
+  setLeft(-25);
+  setRight(-25);
+  hold(Deploy);
   setM(Deploy,0);
-  wait(600);
-
-  wait(900);
-  setM(Roller,-50);
-  setM(Roller2,-50);
   deploying=false;
 }
 void driver_deploy(bool SKILLS=false){
@@ -218,15 +199,7 @@ void driver_deploy(bool SKILLS=false){
     wait(30);
     if(P(ButtonL1))setM(Deploy,50);
     else{
-    int dep=Deploy.rotation(rotationUnits::deg);
-    //Brain.Screen.print(dep);
-        if(dep>900)setM(Deploy,0);
-      else if(dep>870)setM(Deploy,35);
-     else if(dep>800)setM(Deploy,50);
-     else if(dep>750)setM(Deploy,33);
-     else if(dep>550)setM(Deploy,40);
-     else if(dep>350)setM(Deploy,50);
-     else setM(Deploy,70);
+    set_deploy();
     }
       ttt+=30;
   }
@@ -249,7 +222,39 @@ void driver_deploy(bool SKILLS=false){
   deploying=false;
 }
 
+int prev_drive=0;
 int drive_control(){
+  while(true){
+      if(P(ButtonA)){
+    setLeft(-30),setRight(-30);
+    continue; 
+  }
+   if(P(ButtonX)){
+    setLeft(30),setRight(30);
+    continue; 
+  }
+  int cap = 100;
+	//if (!full_speed)cap = 60, add = 7;
+	//else add = 40;
+	int x = ct.Axis3.value(), y = ct.Axis2.value();
+
   
+	if (abs(x) <= 5 && abs(y) <= 5)x = 0, y = 0;
+
+    x=(x/abs(x))*x*x/100.0;
+    y=(y/abs(y))*y*y/100.0;
+    if(abs(x-y)<15)y=x;
+  
+	//Dead Zone Control and Straight-correction
+
+	if (x < -cap)x = -cap;
+	if (x > cap)x = cap;
+	if (y < -cap)y = -cap;
+	if (y > cap)y = cap;
+	//Sets Target for Slew Rate Task
+  setLeft(x);
+  setRight(y);
+  wait(20);
+  }
   return 0;
 }

@@ -14,7 +14,7 @@ Action.h: Go into Depression
 
 //Constants for Auton Selection or Testing
 #define DEBUG 0
-#define AUTON 7
+#define AUTON 1
 
 using namespace vex;
 using namespace std;
@@ -57,9 +57,8 @@ void autonomous( void ) {
 
 void usercontrol( void ) {
   ct.ButtonUp.released(changeSpeed);
-  ct.ButtonB.released(hold_drfb);
-  //ct.ButtonR1.released(lift_tower);
-  //ct.ButtonR2.released(lift_tower2);
+  ct.ButtonR1.released(roller_intake);
+ // ct.ButtonR2.released(roller_outtake);
   ct.ButtonLeft.released(change_straight);
   //ct.ButtonLeft.released(changeSpeed);
   inUse=false; //Ensuring Autonomous PID doesn't run 
@@ -67,9 +66,11 @@ void usercontrol( void ) {
 
   if(Drive!=NULL)Drive->stop();
   if(S!=NULL)S->stop();
+  //task* S=new task(slew);
   task* P=new task(drive_control);
-  add=50;
   P->resume();
+  add=10;
+  //P->resume();
   while (true) {
     run();
   }
