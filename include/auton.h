@@ -3,8 +3,10 @@
 using namespace vex;
 #define AUTON_NUM 8
 #define LIFT_CONSTANT 1000
+#define ROLLER_CONSTANT 210
 string auton_description[AUTON_NUM]={"8 Cube Unprotected Red","6 Cube Protected Red","6 Cube Unprotected Red","Prog Skills","8 Cube Unprotected Blue","6 Cube Protected Red","6 Cube Unprotected Red","BLANK"};
 void Red1(task*& Drive, task*& S,bool prog=false){
+  //Deploy
   Drive->suspend();
   S->suspend();
   init_auton();
@@ -12,32 +14,30 @@ void Red1(task*& Drive, task*& S,bool prog=false){
   S->resume();
   setRoller(100);
   setM(Lift1,-70);
-  wait(000);
-  //setM(Deploy,100);
+  
+  //1st Line of Cubes
    get3cubes_straight();
-  // drive(0,0);
-  // wait(100);
   setRoller(2);
    driveTile(-0.3,55);
    wait(300);
-   drive(0,0);
-   wait(50);
-  // clear(Left);
-  // clear(Right);
+   stop_drive();
+
+   //Align for 2nd Line
    turnDeg(-45,62);
    wait(600);
    driveTile(-1.62,80);
    wait(1650);
    turnDeg(44,60);
    wait(650);
-   drive(0,0);
-   wait(100);
+   stop_drive();
+
+   //2nd Line of Cubes
    setRoller(100);
    driveTile(1.5,60);
    wait(1400);
-   drive(0,0);
-   wait(100);
+   stop_drive();
    
+   //Deploying
    driveTile(-0.76,50);
    wait(440);
    setRoller(53);
@@ -45,11 +45,10 @@ void Red1(task*& Drive, task*& S,bool prog=false){
    drive(0,0);
    wait(30);
    turnDeg(132,45);
-    Roller.startRotateFor(-167,rotationUnits::deg,-40,velocityUnits::pct);
-   Roller2.startRotateFor(-167,rotationUnits::deg,-40,velocityUnits::pct);
+    Roller.startRotateFor(ROLLER_CONSTANT,rotationUnits::deg,-40,velocityUnits::pct);
+   Roller2.startRotateFor(ROLLER_CONSTANT,rotationUnits::deg,-40,velocityUnits::pct);
    wait(1300);
-   drive(0,0);
-   wait(50);
+   stop_drive();
    setRoller(12);
    driveTile(0.65,34);
    Deploy.startRotateFor(300,rotationUnits::deg);
@@ -64,27 +63,7 @@ void Red1(task*& Drive, task*& S,bool prog=false){
    auton_deploy(6);
    setLeft(-25);
    setRight(-25);
-  // wait(500);
-  // drive(0,0);
-  // wait(100);
-  // get3cubes_straight();
-  // drive(0,0);
-  // wait(200);
-  // turnDeg(135,35);
-  // wait(1800);
-  // //drive(0,0);
-  // wait(200);
-  // driveTile(1.8,53);
-  // wait(900);
-  // for(int i=0;i<30;i++){
-  //   if(get(Deploy)<300)setM(Deploy,100);
-  //   else setM(Deploy,20);
-  // }
-  // wait(600);
-  // //wait(1500);
-  // drive(0,0);
-  // wait(200);
-  // auton_deploy(3);
+
   if(!prog)end_auton();
 }
 //Scratched

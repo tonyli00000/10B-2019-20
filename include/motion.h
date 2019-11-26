@@ -31,7 +31,8 @@ int target_noPID;
 int drivePIDFn() {
 	clear(Left);
 	clear(Right);
-
+  clear(Left2);
+  clear(Right2);
 	int errorLeft;
 	int errorRight;
 	int lasterrorLeft, lasterrorRight;
@@ -45,8 +46,20 @@ int drivePIDFn() {
 
 	while (true) {
     if(!inUse)continue;
-		errorLeft = targetLeft - get(Left); //error is target minus actual value
-		errorRight = targetRight - get(Right);
+    if(targetLeft==targetRight){
+      if(targetLeft<0){
+        errorLeft = targetLeft - get(Left); //error is target minus actual value
+		    errorRight = targetRight - get(Right);
+      }
+      else {
+        errorLeft = targetLeft - get(Left2); //error is target minus actual value
+		    errorRight = targetRight - get(Right2);
+      }
+    }
+    else{
+		  errorLeft = targetLeft - get(Left); //error is target minus actual value
+		  errorRight = targetRight - get(Right);
+    }
     if(noPID){
       target[0]=target_noPID;
       target[2]=target_noPID;
@@ -119,6 +132,8 @@ void drive(int left, int right) {
 	currAngle = Gyro.value(rotationUnits::raw);
   clear(Left);
   clear(Right);
+  clear(Left2);
+  clear(Right2);
   targetLeft=0;
   targetRight=0;
 	if (left == right)straight = true;
@@ -130,8 +145,6 @@ void drive(int left, int right) {
 }
 
 void driveTile(double tiles,int cap=100){
-  clear(Left);
-  clear(Right);
   targetLeft=targetRight=0;
   drive(tiles*TILE_CONSTANT,tiles*TILE_CONSTANT);
   velCap=cap;

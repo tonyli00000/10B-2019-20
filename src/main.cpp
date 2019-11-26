@@ -13,7 +13,7 @@ Action.h: Go into Depression
 */
 
 //Constants for Auton Selection or Testing
-#define DEBUG 0
+#define DEBUG 1
 #define AUTON 1
 
 using namespace vex;

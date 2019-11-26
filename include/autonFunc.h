@@ -52,6 +52,10 @@ void get4cubes_straight(){
   setM(Deploy,0);
   wait(1650);
 }
+void stop_drive(){
+  drive(0,0);
+  wait(100);
+}
 void end_auton(){
   wait(60000);
 }
