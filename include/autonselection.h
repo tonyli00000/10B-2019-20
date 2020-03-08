@@ -81,7 +81,6 @@ userTouchCallbackReleased() {
 
 		displayButtonControls(index, false);
 
-    Brain.Screen.printAt(30,125,("Auton Selected: "+auton_description[index]).c_str());
 	}
 }
 
@@ -113,7 +112,7 @@ displayButtonControls(int index, bool pressed) {
 	}
 }
 void initScreen(){
-    Brain.Screen.pressed(userTouchCallbackPressed);
+  Brain.Screen.pressed(userTouchCallbackPressed);
 	Brain.Screen.released(userTouchCallbackReleased);
 
 	Brain.Screen.setFillColor(vex::color(0x400000));
